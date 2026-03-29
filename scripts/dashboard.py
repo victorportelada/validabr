@@ -124,4 +124,5 @@ with right:
     with st.expander("Show Pytest Log", expanded=True):
         st.code(test_output, language="text")
 
-st.info("Set `GITHUB_TOKEN=your_token` in a `.env` file to see live CI data.")
+if not os.environ.get("GITHUB_TOKEN"):
+    st.info("Set `GITHUB_TOKEN=your_token` in a `.env` file to see live CI data.")
