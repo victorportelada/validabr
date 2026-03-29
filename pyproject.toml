@@ -7,7 +7,7 @@ readme = "README.md"
 authors = [
     { name = "victor", email = "vitiportelada@gmail.com" }
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 dependencies = []
 
 [build-system]
@@ -22,6 +22,7 @@ dev = [
     "pytest-cov>=7.1.0",
     "python-semantic-release>=10.5.3",
     "ruff>=0.15.8",
+    "streamlit>=1.55.0",
 ]
 
 [tool.ruff]
