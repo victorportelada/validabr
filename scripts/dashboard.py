@@ -7,6 +7,10 @@ from pathlib import Path
 from typing import Literal
 
 import streamlit as st
+from dotenv import load_dotenv
+
+# Load `.env` file automatically so user doesn't have to inject variables in their terminal
+load_dotenv()
 
 # Config
 st.set_page_config(page_title="pybrdoc Tracker", page_icon="🇧🇷", layout="wide")
@@ -120,4 +124,4 @@ with right:
     with st.expander("Show Pytest Log", expanded=True):
         st.code(test_output, language="text")
 
-st.info("Set GITHUB_TOKEN to see live CI data.")
+st.info("Set `GITHUB_TOKEN=your_token` in a `.env` file to see live CI data.")
