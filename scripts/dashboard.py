@@ -68,7 +68,7 @@ def fetch_ci_status() -> tuple[str, Literal["normal", "inverse", "off"]]:
         return "⚠️ Private Repo (Set GITHUB_TOKEN)", "off"
     try:
         req = urllib.request.Request(
-            "https://api.github.com/repos/seunome/pybrdoc/actions/runs?per_page=1",
+            "https://api.github.com/repos/victorportelada/pybrdoc/actions/runs?per_page=1",
             headers={
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github.v3+json",
