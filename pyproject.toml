@@ -17,8 +17,10 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "mypy>=1.19.1",
+    "pre-commit>=4.5.1",
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
+    "python-semantic-release>=10.5.3",
     "ruff>=0.15.8",
 ]
 
@@ -35,3 +37,13 @@ addopts = "--cov=src --cov-report=term-missing"
 
 [tool.mypy]
 strict = true
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+build_command = "uv build"
+commit_message = "chore(release): v{version} [skip ci]"
+
+[tool.semantic_release.publish]
+upload_to_vcs_release = true
+dist_glob_patterns = ["dist/*"]
