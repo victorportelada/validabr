@@ -1,5 +1,6 @@
 from pybrdoc.validators.cpf import is_valid_cpf
 
+
 class TestCPFValidator:
     def test_valid_cpf_without_punctuation(self) -> None:
         # Known valid, randomly generated CPF
@@ -23,7 +24,7 @@ class TestCPFValidator:
 
     def test_invalid_cpf_letters(self) -> None:
         assert is_valid_cpf("abc.def.ghi-jk") is False
-        
+
     def test_empty_cpf(self) -> None:
         assert is_valid_cpf("") is False
         assert is_valid_cpf(None) is False  # type: ignore
