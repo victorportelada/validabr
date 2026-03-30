@@ -2,9 +2,9 @@ import re
 
 import pytest
 
-from pybrdoc.generators.ie import generate_ie
-from pybrdoc.parsers.ie import format_ie
-from pybrdoc.validators.ie import is_valid_ie
+from brdocs.generators.ie import generate_ie
+from brdocs.parsers.ie import format_ie
+from brdocs.validators.ie import is_valid_ie
 
 _ALL_STATES = [
     "AC",

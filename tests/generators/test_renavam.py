@@ -1,5 +1,5 @@
-from pybrdoc.generators.renavam import generate_renavam
-from pybrdoc.validators.renavam import is_valid_renavam
+from brdocs.generators.renavam import generate_renavam
+from brdocs.validators.renavam import is_valid_renavam
 
 
 class TestGenerateRenavam:

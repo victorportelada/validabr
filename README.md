@@ -1,10 +1,10 @@
-# pybrdoc
+# brdocs
 
 Zero-dependency Python library for validating, generating, and formatting Brazilian document numbers — CPF, CNPJ, CNJ, IE (all 27 states), RENAVAM, and Título de Eleitor.
 
-[![PyPI](https://img.shields.io/pypi/v/pybrdoc.svg)](https://pypi.org/project/pybrdoc/)
-[![Python](https://img.shields.io/pypi/pyversions/pybrdoc.svg)](https://pypi.org/project/pybrdoc/)
-[![CI](https://github.com/victorportelada/pybrdoc/actions/workflows/ci.yml/badge.svg)](https://github.com/victorportelada/pybrdoc/actions)
+[![PyPI](https://img.shields.io/pypi/v/brdocs.svg)](https://pypi.org/project/brdocs/)
+[![Python](https://img.shields.io/pypi/pyversions/brdocs.svg)](https://pypi.org/project/brdocs/)
+[![CI](https://github.com/victorportelada/brdocs/actions/workflows/ci.yml/badge.svg)](https://github.com/victorportelada/brdocs/actions)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)]()
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
@@ -13,11 +13,11 @@ Zero-dependency Python library for validating, generating, and formatting Brazil
 ## Installation
 
 ```bash
-pip install pybrdoc
+pip install brdocs
 ```
 
 ```bash
-uv add pybrdoc
+uv add brdocs
 ```
 
 ---
@@ -25,22 +25,22 @@ uv add pybrdoc
 ## Quick Start
 
 ```python
-import pybrdoc
+import brdocs
 
 # Validate
-pybrdoc.is_valid_cpf("529.982.247-25")        # True
-pybrdoc.is_valid_cnpj("11.222.333/0001-81")   # True
-pybrdoc.is_valid_ie("110.042.490.114", "SP")  # True
+brdocs.is_valid_cpf("529.982.247-25")        # True
+brdocs.is_valid_cnpj("11.222.333/0001-81")   # True
+brdocs.is_valid_ie("110.042.490.114", "SP")  # True
 
 # Format (strips punctuation and re-applies canonical mask)
-pybrdoc.format_cpf("52998224725")             # "529.982.247-25"
-pybrdoc.format_cnpj("11222333000181")         # "11.222.333/0001-81"
-pybrdoc.format_ie("110042490114", "SP")       # "110.042.490.114"
+brdocs.format_cpf("52998224725")             # "529.982.247-25"
+brdocs.format_cnpj("11222333000181")         # "11.222.333/0001-81"
+brdocs.format_ie("110042490114", "SP")       # "110.042.490.114"
 
 # Generate valid random documents
-pybrdoc.generate_cpf()                        # e.g. "52998224725"
-pybrdoc.generate_cpf(formatted=True)          # e.g. "529.982.247-25"
-pybrdoc.generate_ie("MG")                     # e.g. "0621071700110"
+brdocs.generate_cpf()                        # e.g. "52998224725"
+brdocs.generate_cpf(formatted=True)          # e.g. "529.982.247-25"
+brdocs.generate_ie("MG")                     # e.g. "0621071700110"
 ```
 
 ---
@@ -136,4 +136,4 @@ All formatters accept raw digit strings or already-formatted strings and raise `
 ## Roadmap
 
 - [ ] `parse_ie()` — structured parser returning a named dict (sequential, state, check digits)
-- [ ] CLI wrapper — `pybrdoc validate cpf 529.982.247-25`
+- [ ] CLI wrapper — `brdocs validate cpf 529.982.247-25`

@@ -1,11 +1,13 @@
-# Pybrdoc Roadmap & Vision (v0.2.0 → v1.0.0)
+# Brdocs Roadmap & Vision (v0.2.0 → v2.0.0)
 
-This document serves as the canonical source of truth for the future development of `pybrdoc`. It outlines the strategic direction, architectural decisions, and specific implementation tasks required for future AI agents or developers to elevate the library into the industry standard for Brazilian document handling.
+This document serves as the canonical source of truth for the future development of `brdocs`. It outlines the strategic direction, architectural decisions, and specific implementation tasks required for future AI agents or developers to elevate the library into the industry standard toolkit for handling, enriching, and securing Brazilian data.
+
+Our vision is no longer just "validation". It is to build an **Enterprise Toolkit** that solves actual business problems (LGPD, Data Engineering, PII Enrichment).
 
 ## Principles & Guardrails
 
 Before starting any work on this roadmap, ensure you adhere to the project's core tenets:
-1. **Zero Core Dependencies**: The `src/pybrdoc/` core (excluding `integrations/`) must rely *only* on the Python Standard Library.
+1. **Zero Core Dependencies**: The `src/brdocs/` core (excluding `integrations/`) must rely *only* on the Python Standard Library.
 2. **100% Branch Coverage**: All validators, generators, and formatters must maintain exact 100% test coverage. Avoid generic `Exception` types; raise precise `ValueError` exceptions with clear, descriptive messages.
 3. **Impeccable Linting**: Standardized on `ruff` for linting/formatting and `mypy --strict` for typing. 
 4. **Idempotent APIs**: Formatting and parsing functions must handle *both* raw digit strings and already-formatted strings gracefully without crashing. 
@@ -18,7 +20,7 @@ The current API (`is_valid_*`, `generate_*`, `format_*`) is complete. The next n
 
 ### 1. Structured Data Parsers (`parse_*`)
 
-Instead of just returning formatted strings, `pybrdoc` should offer parsing functions that decompose strings into standard Python `dataclasses` or `NamedTuple` objects.
+Instead of just returning formatted strings, `brdocs` should offer parsing functions that decompose strings into standard Python `dataclasses` or `NamedTuple` objects.
 
 *   `parse_cpf(cpf: str) -> CPFData`
     *   Decomposes into: `root` (first 8 digits), `region` (9th digit indicating emission state like SP, RJ, etc.), and `check_digits` (last 2 digits).
@@ -38,43 +40,44 @@ Instead of just returning formatted strings, `pybrdoc` should offer parsing func
 Build a zero-dependency CLI using Python's native `argparse`. Expose it via `[project.scripts]` in `pyproject.toml`.
 
 **Commands:**
-*   `pybrdoc validate <type> <value>` (Returns exit code 0 if valid, 1 if invalid, printing standard output).
-*   `pybrdoc generate <type> [--formatted] [--state XX]`
-*   `pybrdoc format <type> <value> [--state XX]`
-*   `pybrdoc parse <type> <value> [--state XX]` (Outputs structured JSON).
+*   `brdocs validate <type> <value>` (Returns exit code 0 if valid, 1 if invalid, printing standard output).
+*   `brdocs generate <type> [--formatted] [--state XX]`
+*   `brdocs format <type> <value> [--state XX]`
+*   `brdocs mask <type> <value>` (Anonymizes the input).
+*   `brdocs parse <type> <value> [--state XX]` (Outputs structured JSON).
 
 ---
 
 ## Phase 2: Web Framework Integrations
 
-To ensure maximum adoption, the library must integrate seamlessly into modern Python frameworks. We will accomplish this by creating a structured `src/pybrdoc/integrations/` module. Frameworks will be defined as "optional dependencies" (`pip install pybrdoc[pydantic]`).
+To ensure maximum adoption, the library must integrate seamlessly into modern Python frameworks. We will accomplish this by creating a structured `src/brdocs/integrations/` module. Frameworks will be defined as "optional dependencies" (`pip install brdocs[pydantic]`).
 
 ### 1. Pydantic v2 (FastAPI, SQLModel)
 Create custom types using `pydantic.functional_validators`.
-*   Module: `src/pybrdoc/integrations/pydantic.py`
+*   Module: `src/brdocs/integrations/pydantic.py`
 *   Exports: `CPF`, `CNPJ`, `IE`, `CNJ`, `Renavam`, `TituloEleitor`
 *   Behavior: Provide `BeforeValidator` annotations that validate string inputs using `is_valid_*` and cast them into their canonical string formats or structured dataclasses.
 *   Example:
     ```python
     from pydantic import BaseModel
-    from pybrdoc.integrations.pydantic import CPF 
+    from brdocs.integrations.pydantic import CPF 
 
     class UserData(BaseModel):
         document: CPF # Raises standard Pydantic ValidationError if invalid
     ```
 
 ### 2. Django & Django REST Framework (DRF)
-*   Module: `src/pybrdoc/integrations/django.py`
+*   Module: `src/brdocs/integrations/django.py`
 *   Exports: `CPFField`, `CNPJField`, `BRDocumentField` (polymorphic constraint).
 *   Implement native Django validators (`django.core.exceptions.ValidationError`) and standard DB Form Fields. 
 
-*Agent Implementation Note: All integration modules must use `try/except ImportError` around framework imports so that `pybrdoc` can still be installed safely in environments without Django/Pydantic.*
+*Agent Implementation Note: All integration modules must use `try/except ImportError` around framework imports so that `brdocs` can still be installed safely in environments without Django/Pydantic.*
 
 ---
 
 ## Phase 3: Expand Document Coverage
 
-Broaden `pybrdoc` up into the undisputed standard by supporting the remaining common Brazilian documents:
+Broaden `brdocs` to be the undisputed standard by supporting the remaining common Brazilian documents:
 
 ### 1. PIS / PASEP / NIT
 *   **Structure:** 11 digits. Formatting: `XXX.XXXXX.XX-X`.
@@ -83,7 +86,7 @@ Broaden `pybrdoc` up into the undisputed standard by supporting the remaining co
 
 ### 2. CNS (Cartão Nacional de Saúde / SUS)
 *   **Structure:** 15 digits.
-*   **Logic:** Heavily integrated logically (Module 11). Often starts with 1, 2, 7, 8, or 9. The check digit logic varies depending on the initial digits (Definitive vs. Temporary cards).
+*   **Logic:** Heavily integrated logically (Modulo 11). Often starts with 1, 2, 7, 8, or 9. The check digit logic varies depending on the initial digits (Definitive vs. Temporary cards).
 *   **Tasks:** Build `is_valid_cns()`, `generate_cns()`, `format_cns()` (`XXX XXXX XXXX XXXX`).
 
 ### 3. Chave de Acesso NFe / CTe / MDFe
@@ -104,10 +107,50 @@ Broaden `pybrdoc` up into the undisputed standard by supporting the remaining co
 
 ---
 
+## Phase 4: LGPD & Security Toolkit (Anonymization & Scanning)
+
+To differentiate `brdocs` entirely from simple validation scripts, introduce a robust toolset designed to solve LGPD (Lei Geral de Proteção de Dados) challenges.
+
+### 1. PII Redaction (`mask_*` and `anonymizer`)
+*   Create a module (`src/brdocs/secure.py` or similar) containing masking operators.
+*   Examples: `mask_cpf("123.456.789-00")` -> `"***.456.789-**"`
+*   Build a global text scanner: `brdocs.secure.redact_text(log_string, types=["CPF", "CNPJ"])`. This should scan standard text logs, identify potentially valid documents (via regex + modulo 11 validation combined), and replace them with asterisks natively.
+
+### 2. Log Middleware & Integrations
+*   Provide a drop-in Python `logging.Filter` to attach to enterprise loggers, automatically filtering out sensitive CPFs/CNPJs before saving logs to a file or DataDog.
+
+---
+
+## Phase 5: Open API Data Enrichment
+
+Move beyond mathematical validation to real-world context data by connecting to freely available public APIs. Give developers *business value*.
+
+### 1. `brdocs.enrich` Module
+*   Add optional API-fetching methods (e.g., `enrich_cnpj(cnpj: str)`).
+*   **Integrations:**
+    *   Fetch CNPJ data (ReceitaWS or BrasilAPI) to pull: `razao_social`, `cnae`, `status_ativo`, `endereco`.
+    *   Fetch CEP data (BrasilAPI) to pull: `logradouro`, `cidade`, `estado`.
+*   **Architecture:** Use pure `urllib` to retain the zero-dependency rule, but return strongly-typed datastructures (or dicts) handling error states perfectly (rate limits, network errors).
+
+---
+
+## Phase 6: Enterprise Data Engineering (Pandas / Polars)
+
+Position `brdocs` as the defacto library for Brazilian Data Engineering workloads. 1 million rows of CPFs should validate in less than a second.
+
+### 1. Pandas `Series` Accessor Extensions (`.brdocs` accessor)
+*   **Feature:** Add a standard Pandas accessor when `pandas` is installed.
+*   **Example:** `df['is_valid'] = df['cpf'].brdocs.is_valid_cpf()`
+### 2. Polars Native Extensions (Python API)
+*   **Feature:** Integrate vectorised support for incredibly massive datasets via Polars Extension API logic.
+*   **Why:** Cleaning big datasets that contain "bad" CNPJs or CPFs is a standard and massive pain point for any Data team traversing Brazilian CRM data.
+
+---
+
 ## Agent Handoff Checklist
 
 If you are an AI reading this file to continue work:
-1. Ensure your implementation remains inside `src/pybrdoc/`.
+1. Ensure your implementation remains inside `src/brdocs/`.
 2. Do not introduce requirements directly into `pyproject.toml` base dependencies. Use `[project.optional-dependencies]` if strictly needed.
 3. Every new algorithm requires a symmetric implementation of: _Generator_, _Validator_, _Formatter_, and _Parser_.
 4. Achieve exactly 100% code coverage. Run tests using `uv run pytest`. Verify linting using `uv run ruff check src/ tests/` and `uv run mypy src/ tests/`. 

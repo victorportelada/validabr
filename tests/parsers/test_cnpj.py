@@ -1,7 +1,7 @@
 import pytest
 
-from pybrdoc.generators.cnpj import generate_cnpj
-from pybrdoc.parsers.cnpj import format_cnpj
+from brdocs.generators.cnpj import generate_cnpj
+from brdocs.parsers.cnpj import format_cnpj
 
 
 class TestFormatCNPJ:

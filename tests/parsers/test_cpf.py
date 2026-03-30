@@ -1,7 +1,7 @@
 import pytest
 
-from pybrdoc.generators.cpf import generate_cpf
-from pybrdoc.parsers.cpf import format_cpf
+from brdocs.generators.cpf import generate_cpf
+from brdocs.parsers.cpf import format_cpf
 
 
 class TestFormatCPF:

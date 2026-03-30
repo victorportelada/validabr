@@ -1,8 +1,8 @@
 
 [project]
-name = "pybrdoc"
+name = "brdocs"
 version = "0.1.0"
-description = "Validators, generators and formatters for Brazilian documents (CPF, CNPJ, CNJ, IE, RENAVAM, Título de Eleitor)"
+description = "Enterprise toolkit for validating, parsing, enriching, and anonymizing Brazilian documents (LGPD-ready)"
 readme = "README.md"
 authors = [
     { name = "victor", email = "vitiportelada@gmail.com" }

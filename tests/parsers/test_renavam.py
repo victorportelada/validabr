@@ -1,7 +1,7 @@
 import pytest
 
-from pybrdoc.generators.renavam import generate_renavam
-from pybrdoc.parsers.renavam import format_renavam
+from brdocs.generators.renavam import generate_renavam
+from brdocs.parsers.renavam import format_renavam
 
 
 class TestFormatRENAVAM:

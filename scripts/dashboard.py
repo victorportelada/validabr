@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Config
-st.set_page_config(page_title="pybrdoc Tracker", page_icon="🇧🇷", layout="wide")
+st.set_page_config(page_title="brdocs Tracker", page_icon="🇧🇷", layout="wide")
 PROJECT_ROOT = Path(__file__).parent.parent
 
 
@@ -43,7 +43,7 @@ def parse_roadmap() -> tuple[list[str], list[str]]:
     return completed, pending
 
 
-st.title("🇧🇷 pybrdoc | Development Dashboard")
+st.title("🇧🇷 brdocs | Development Dashboard")
 st.markdown("Live view of project progress, test status, coverage, and CI pipeline.")
 
 with st.spinner("Running test suite & parsing project data..."):
@@ -68,7 +68,7 @@ def fetch_ci_status() -> tuple[str, Literal["normal", "inverse", "off"]]:
         return "⚠️ Private Repo (Set GITHUB_TOKEN)", "off"
     try:
         req = urllib.request.Request(
-            "https://api.github.com/repos/victorportelada/pybrdoc/actions/runs?per_page=1",
+            "https://api.github.com/repos/victorportelada/brdocs/actions/runs?per_page=1",
             headers={
                 "Authorization": f"Bearer {token}",
                 "Accept": "application/vnd.github.v3+json",

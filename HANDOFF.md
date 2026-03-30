@@ -1,4 +1,4 @@
-# pybrdoc Handoff Documentation
+# brdocs Handoff Documentation
 
 This document summarizes recent progress and outlines what remains to be built.
 
@@ -20,7 +20,7 @@ This document summarizes recent progress and outlines what remains to be built.
 - `watchdog` for Streamlit hot-reload
 - GitHub Actions configured for automatic PyPI publication using Semantic Release
 
-### Validators (`src/pybrdoc/validators/`)
+### Validators (`src/brdocs/validators/`)
 | Module | Coverage |
 |---|---|
 | `cpf.py` | 100% |
@@ -30,10 +30,10 @@ This document summarizes recent progress and outlines what remains to be built.
 | `renavam.py` | 100% |
 | `titulo_eleitor.py` | 100% |
 
-### Generators (`src/pybrdoc/generators/`)
+### Generators (`src/brdocs/generators/`)
 All generator modules are complete with 100% coverage.
 
-### Parsers (`src/pybrdoc/parsers/`)
+### Parsers (`src/brdocs/parsers/`)
 All formatters are complete:
 - `format_cpf()`
 - `format_cnpj()`
@@ -58,7 +58,7 @@ All formatters are complete:
 For the complete technical breakdown and the long-term vision of the project (including parsers, CLI, Pydantic/Django integrations, and new document types like PIS, CNS, NFe, CEP, and PIX), see [ROADMAP.md](ROADMAP.md).
 
 1. Implement `parse_ie()` — structured parser returning a named dict (sequential, state, check digits)
-2. Add a CLI wrapper — e.g. `pybrdoc validate cpf 529.982.247-25`
+2. Add a CLI wrapper — e.g. `brdocs validate cpf 529.982.247-25`
 
 ---
 
