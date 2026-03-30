@@ -1,40 +1,74 @@
 # pybrdoc Handoff Documentation
 
-This document summarizes recent progress and outlines exactly what remains to be built in this codebase so you can jump right in.
+This document summarizes recent progress and outlines what remains to be built.
 
-## What We Have Done (Completed)
-- **Dashboard & CI Integration**: Built a local Streamlit dashboard (`scripts/dashboard.py`) to monitor `pytests` output and query live GitHub Actions CI API (`victorportelada/pybrdoc`).
-- **Dev Environment Quality of Life**: Added `python-dotenv` for zero-configuration testing via `.env` file instead of passing terminal args, and `watchdog` to streamline Streamlit hot-reloading.
-- **CI Dependency Fix**: Fixed GitHub Actions failing `uv` builds by lowering the `requires-python` check in `pyproject.toml` from `>=3.14` down to `>=3.10`.
-- **Validators & Parsers Core**:
-  - Implemented the `CPF` and `CNPJ` robust validation logic.
-  - Implemented generic text sanitization (stripping non-digits) in `utils/cleaner.py`.
-  - Implemented generation logic (`generators/`) for CNPJ and CPF masks.
-  - Fixed edge-case bugs in the validation regex.
+## Status: Feature-Complete on `develop` (2026-03-29)
 
-## Work Division (2 parallel Claude instances)
+- ✅ **100% test coverage** — 371 tests, 652 statements, zero misses
+- ✅ **Ruff clean** — no linting violations
+- ✅ **Mypy clean** — no type errors
+- ✅ **Pushed to `origin/develop`**
 
-### Instance A — `pybrdoc` (this instance): IE (Inscrição Estadual)
-- `src/pybrdoc/validators/ie.py` — all 27 states
-- `src/pybrdoc/generators/ie.py`
-- `tests/validators/test_ie.py`
-- `tests/generators/test_ie.py`
+---
 
-### Instance B — other instance: Processo CNJ + Título de Eleitor
-- `src/pybrdoc/validators/processo_cnj.py`
-- `src/pybrdoc/generators/processo_cnj.py`
-- `src/pybrdoc/validators/titulo_eleitor.py`
-- `src/pybrdoc/generators/titulo_eleitor.py`
-- respective test files
+## What We've Built
 
-## What We Need To Do (Next Steps)
-1. ~~**Renavam**~~: Done (validator + generator + tests).
-2. **IE (Inscrição Estadual)**: [IN PROGRESS — Instance A] All 27 states.
-3. **Processo CNJ**: [Instance B] 20-digit judicial process number.
-4. **Título de Eleitor**: [Instance B] 12-digit voter registry (mod-11 check on state IDs).
-5. **Expand Test Coverage**: 80%+ coverage on all generators and validators.
+### Dev Environment
+- Streamlit dashboard (`scripts/dashboard.py`) — live CI/CD + coverage display
+- `python-dotenv` for zero-config `.env` secrets (GITHUB_TOKEN)
+- `watchdog` for Streamlit hot-reload
+- CI fix: lowered `requires-python` from `>=3.14` → `>=3.10`
 
-## Important Project Notes
-- **Testing**: Run `uv run pytest` to execute tests locally (the dashboard also parses this out).
-- **Environment Run**: Start the dashboard via `uv run streamlit run scripts/dashboard.py`
-- All remaining logic logic should be added into the `src/pybrdoc/validators/`, `src/pybrdoc/generators/`, and `src/pybrdoc/parsers/` modules.
+### Validators (`src/pybrdoc/validators/`)
+| Module | Coverage |
+|---|---|
+| `cpf.py` | 100% |
+| `cnpj.py` | 100% |
+| `cnj.py` | 100% |
+| `ie.py` (27 states) | 100% |
+| `renavam.py` | 100% |
+| `titulo_eleitor.py` | 100% |
+
+### Generators (`src/pybrdoc/generators/`)
+Same modules, same 100% coverage.
+
+---
+
+## Branch Strategy
+
+| Branch | Purpose |
+|---|---|
+| `develop` | Daily work, active development |
+| `main` | Tagged releases only (PyPI-ready) |
+
+**Don't merge to `main` until:**
+1. `src/pybrdoc/parsers/` is implemented (`format_cpf()`, `mask_cnpj()`, etc.)
+2. `src/pybrdoc/__init__.py` exports real public API (not just `hello()`)
+3. `pyproject.toml` version bumped to `0.1.0`
+4. `uv build` + `uv publish --dry-run` validated
+
+---
+
+## Next Steps
+1. Implement `src/pybrdoc/parsers/` — formatting and masking per document type
+2. Replace `hello()` stub in `__init__.py` with real public API
+3. Run `uv build` to validate packaging
+4. Merge `develop` → `main` + tag `v0.1.0` → PyPI release
+
+---
+
+## Running Locally
+
+```bash
+# Run tests with coverage
+uv run pytest
+
+# Start dev dashboard
+uv run streamlit run scripts/dashboard.py
+
+# Lint + type check
+uv run ruff check src/ tests/
+uv run mypy src/ tests/
+```
+
+Environment: requires `GITHUB_TOKEN` in `.env` for dashboard CI data.
