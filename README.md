@@ -1,67 +1,139 @@
 # pybrdoc
 
-**The ultimate, zero-dependency Python utility for validating, parsing, and generating Brazilian document numbers.**
+Zero-dependency Python library for validating, generating, and formatting Brazilian document numbers — CPF, CNPJ, CNJ, IE (all 27 states), RENAVAM, and Título de Eleitor.
 
-[![CI/CD](https://github.com/seunome/pybrdoc/actions/workflows/ci.yml/badge.svg)](https://github.com/seunome/pybrdoc/actions)
+[![PyPI](https://img.shields.io/pypi/v/pybrdoc.svg)](https://pypi.org/project/pybrdoc/)
+[![Python](https://img.shields.io/pypi/pyversions/pybrdoc.svg)](https://pypi.org/project/pybrdoc/)
+[![CI](https://github.com/victorportelada/pybrdoc/actions/workflows/ci.yml/badge.svg)](https://github.com/victorportelada/pybrdoc/actions)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)]()
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
-[![Semantic Release](https://img.shields.io/badge/semantic--release-active-e10079?logo=semantic-release)](https://github.com/semantic-release/semantic-release)
-
-## Context & Objective
-
-`pybrdoc` was created out of a need for an ultra-fast, robust, strictly typed, and independently tested suite for handling Brazilian-specific structural logic (e.g., CPFs, CNPJs, Processos do CNJ, Renavam).
-
-The goal is to provide **100% mathematical test coverage**, uncompromising performance, and zero bloat for data-engineers, backend developers, and automated systems worldwide dealing with Brazilian data.
 
 ---
 
-## Roadmap & Development Progress
+## Installation
 
-We are currently in active development. Our module roadmap outlines the components scheduled for completion.
-
-### ✅ Validators (Completed)
-
-- [x] **CPF:** Modulo 11 check, length & digit repetition validations.
-- [x] **CNPJ:** Modulo 11 check, length & sequence validation.
-
-### ⏳ Pending Validators
-
-- [ ] **Processo CNJ:** Validating Brazilian legal process numbering logic.
-- [ ] **Renavam:** Vehicle registration numeric format check.
-- [ ] **IE (Inscrição Estadual):** State registration keys (per-state math algorithm).
-- [ ] **Título de Eleitor:** Voter registration verification.
-
-### 🏗️ Generators & Parsers (Upcoming)
-
-- [ ] **Mock Generators:** Realistic mock document generation for testing databases.
-- [ ] **Parsers/Formatters:** Formatting massive data strings into correct punctuation structures (e.g. `12345678909` -> `123.456.789-09`).
-
----
-
-## Infrastructure
-
-The project maintains top-tier open-source quality:
-
-- **Test-Driven:** Everything begins in `tests/`, asserting false before being architected.
-- **CI/CD:** Multi-version parallel testing (Python 3.10 to 3.14).
-- **Auto-Releases:** Semantic Release pushes Python versions out on every merge to `main`.
-- **Pre-commit:** Ruff and MyPy keep the local state immaculately typed and formatted.
-
----
-
-## Usage Example (Current State)
-
-```python
-from pybrdoc.validators.cnpj import is_valid_cnpj
-from pybrdoc.validators.cpf import is_valid_cpf
-
-# Rejects bad CNPJs instantly
-assert is_valid_cnpj("11A222333000181") == False
-
-# Validates proper formats
-assert is_valid_cnpj("11.222.333/0001-81") == True
-
-# Calculates internal checksums behind the scenes
-assert is_valid_cpf("123.456.789-09") == False
+```bash
+pip install pybrdoc
 ```
 
+```bash
+uv add pybrdoc
+```
+
+---
+
+## Quick Start
+
+```python
+import pybrdoc
+
+# Validate
+pybrdoc.is_valid_cpf("529.982.247-25")        # True
+pybrdoc.is_valid_cnpj("11.222.333/0001-81")   # True
+pybrdoc.is_valid_ie("110.042.490.114", "SP")  # True
+
+# Format (strips punctuation and re-applies canonical mask)
+pybrdoc.format_cpf("52998224725")             # "529.982.247-25"
+pybrdoc.format_cnpj("11222333000181")         # "11.222.333/0001-81"
+pybrdoc.format_ie("110042490114", "SP")       # "110.042.490.114"
+
+# Generate valid random documents
+pybrdoc.generate_cpf()                        # e.g. "52998224725"
+pybrdoc.generate_cpf(formatted=True)          # e.g. "529.982.247-25"
+pybrdoc.generate_ie("MG")                     # e.g. "0621071700110"
+```
+
+---
+
+## API Reference
+
+### Validators
+
+| Function | Document | Notes |
+|----------|----------|-------|
+| `is_valid_cpf(cpf)` | CPF | Accepts raw or formatted (`NNN.NNN.NNN-NN`) |
+| `is_valid_cnpj(cnpj)` | CNPJ | Accepts raw or formatted (`NN.NNN.NNN/NNNN-NN`) |
+| `is_valid_cnj(cnj)` | Processo CNJ | ISO 7064 mod 97 |
+| `is_valid_ie(ie, state)` | IE | All 27 states, per-SEFAZ algorithm |
+| `is_valid_renavam(renavam)` | RENAVAM | Accepts 8–11 digits |
+| `is_valid_titulo_eleitor(titulo)` | Título de Eleitor | SP/MG special rule |
+
+### Generators
+
+| Function | Document | Notes |
+|----------|----------|-------|
+| `generate_cpf(formatted=False)` | CPF | |
+| `generate_cnpj(formatted=False)` | CNPJ | |
+| `generate_cnj()` | Processo CNJ | |
+| `generate_ie(state)` | IE | `state` = 2-letter code, e.g. `"SP"` |
+| `generate_renavam()` | RENAVAM | |
+| `generate_titulo_eleitor()` | Título de Eleitor | |
+
+### Formatters (parsers)
+
+| Function | Document | Canonical format |
+|----------|----------|-----------------|
+| `format_cpf(cpf)` | CPF | `NNN.NNN.NNN-NN` |
+| `format_cnpj(cnpj)` | CNPJ | `NN.NNN.NNN/NNNN-NN` |
+| `format_cnj(cnj)` | Processo CNJ | `NNNNNNN-DD.AAAA.J.TT.OOOO` |
+| `format_ie(ie, state)` | IE | State-specific (see table below) |
+| `format_renavam(renavam)` | RENAVAM | `XXXXXXXXXX-X` |
+| `format_titulo_eleitor(titulo)` | Título de Eleitor | `XXXX XXXX XXXX` |
+
+All formatters accept raw digit strings or already-formatted strings and raise `ValueError` on invalid input.
+
+---
+
+## IE — Canonical Formats by State
+
+<details>
+<summary>All 27 states</summary>
+
+| State | Digits | Canonical format |
+|-------|--------|-----------------|
+| AC | 13 | `XXX.XXX.XXX/XXX-XX` |
+| AL | 9 | raw digits |
+| AP | 9 | raw digits |
+| AM | 9 | `XX.XXX.XXX-X` |
+| BA | 8 or 9 | `XXXXXX-XX` / `XXXXXXX-XX` |
+| CE | 9 | `XX.XXX.XXX-X` |
+| DF | 13 | `XXX.XXX.XXX/XXX-XX` |
+| ES | 9 | raw digits |
+| GO | 9 | `XX.XXX.XXX-X` |
+| MA | 9 | raw digits |
+| MT | 11 | raw digits |
+| MS | 9 | raw digits |
+| MG | 13 | `XXX.XXX.XXX/XXXX` |
+| PA | 9 | `XX-XXXXXX-X` |
+| PB | 9 | raw digits |
+| PR | 10 | `XXX.XXXXX-XX` |
+| PE | 9 or 14 | `XXXXXXX-XX` / `XX.X.XXX.XXXXXXX-X` |
+| PI | 9 | raw digits |
+| RJ | 8 | `XX.XXX.XX-X` |
+| RN | 9 or 10 | `XX.XXX.XXX-X` / `XX.XXX.XXX.X-X` |
+| RS | 10 | `XXX/XXXXXXX` |
+| RO | 9 or 14 | raw digits |
+| RR | 9 | raw digits |
+| SC | 9 | `XXX.XXX.XXX` |
+| SP | 12 | `XXX.XXX.XXX.XXX` |
+| SE | 9 | raw digits |
+| TO | 11 | raw digits |
+
+</details>
+
+---
+
+## Design Principles
+
+- **Zero dependencies** — stdlib only
+- **100% test coverage** — every branch, every state
+- **Strict typing** — `mypy --strict` passes
+- **Ruff clean** — format + lint
+- **Semantic versioning** — auto-releases via `python-semantic-release`
+
+---
+
+## Roadmap
+
+- [ ] `parse_ie()` — structured parser returning a named dict (sequential, state, check digits)
+- [ ] CLI wrapper — `pybrdoc validate cpf 529.982.247-25`

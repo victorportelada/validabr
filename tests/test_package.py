@@ -23,5 +23,11 @@ def test_public_api_exports_parsers() -> None:
     assert callable(pybrdoc.format_cpf)
     assert callable(pybrdoc.format_cnpj)
     assert callable(pybrdoc.format_cnj)
+    assert callable(pybrdoc.format_ie)
     assert callable(pybrdoc.format_renavam)
     assert callable(pybrdoc.format_titulo_eleitor)
+
+
+def test_version_is_accessible() -> None:
+    assert isinstance(pybrdoc.__version__, str)
+    assert len(pybrdoc.__version__) > 0
