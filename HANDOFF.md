@@ -55,6 +55,8 @@ All formatters are complete:
 
 ## Next Steps
 
+For the complete technical breakdown and the long-term vision of the project (including parsers, CLI, Pydantic/Django integrations, and new document types like PIS, CNS, NFe, CEP, and PIX), see [ROADMAP.md](ROADMAP.md).
+
 1. Implement `parse_ie()` — structured parser returning a named dict (sequential, state, check digits)
 2. Add a CLI wrapper — e.g. `pybrdoc validate cpf 529.982.247-25`
 
