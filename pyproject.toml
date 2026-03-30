@@ -2,12 +2,12 @@
 [project]
 name = "pybrdoc"
 version = "0.1.0"
-description = "Add your description here"
+description = "Validators, generators and formatters for Brazilian documents (CPF, CNPJ, CNJ, IE, RENAVAM, Título de Eleitor)"
 readme = "README.md"
 authors = [
     { name = "victor", email = "vitiportelada@gmail.com" }
 ]
-requires-python = ">=3.14"
+requires-python = ">=3.10"
 dependencies = []
 
 [build-system]
@@ -17,9 +17,14 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "mypy>=1.19.1",
+    "pre-commit>=4.5.1",
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
+    "python-dotenv>=1.2.2",
+    "python-semantic-release>=10.5.3",
     "ruff>=0.15.8",
+    "streamlit>=1.55.0",
+    "watchdog>=6.0.0",
 ]
 
 [tool.ruff]
@@ -35,3 +40,13 @@ addopts = "--cov=src --cov-report=term-missing"
 
 [tool.mypy]
 strict = true
+
+[tool.semantic_release]
+version_toml = ["pyproject.toml:project.version"]
+branch = "main"
+build_command = "uv build"
+commit_message = "chore(release): v{version} [skip ci]"
+
+[tool.semantic_release.publish]
+upload_to_vcs_release = true
+dist_glob_patterns = ["dist/*"]
