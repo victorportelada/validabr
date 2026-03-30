@@ -2,7 +2,7 @@
 [project]
 name = "pybrdoc"
 version = "0.1.0"
-description = "Add your description here"
+description = "Validators, generators and formatters for Brazilian documents (CPF, CNPJ, CNJ, IE, RENAVAM, Título de Eleitor)"
 readme = "README.md"
 authors = [
     { name = "victor", email = "vitiportelada@gmail.com" }
