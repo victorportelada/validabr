@@ -1,3 +1,11 @@
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as _pkg_version
+
+try:
+    __version__: str = _pkg_version("pybrdoc")
+except PackageNotFoundError:
+    __version__ = "0.0.0.dev0"
+
 from .generators import (
     generate_cnj,
     generate_cnpj,
@@ -10,6 +18,7 @@ from .parsers import (
     format_cnj,
     format_cnpj,
     format_cpf,
+    format_ie,
     format_renavam,
     format_titulo_eleitor,
 )
@@ -23,9 +32,11 @@ from .validators import (
 )
 
 __all__ = [
+    "__version__",
     "format_cnj",
     "format_cnpj",
     "format_cpf",
+    "format_ie",
     "format_renavam",
     "format_titulo_eleitor",
     "generate_cnj",
