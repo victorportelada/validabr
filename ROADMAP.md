@@ -35,7 +35,21 @@ Instead of just returning formatted strings, `brdocs` should offer parsing funct
 *   `parse_titulo_eleitor(titulo: str) -> TituloData`
     *   Decomposes into: `sequential`, `state_code` (UF), and `check_digits`.
 
-### 2. Command-Line Interface (CLI)
+### 2. Bulk Convenience APIs
+
+To match (and exceed) `validate-docbr`'s ergonomics, add the following utilities to the public API (`src/brdocs/__init__.py`):
+
+*   `validate_list(doc_type: str, values: list[str]) -> list[bool]`
+    *   Validates a batch of documents of the same type in one call.
+    *   Example: `brdocs.validate_list("cpf", ["529.982.247-25", "000.000.000-00"])` → `[True, False]`
+*   `generate_list(doc_type: str, n: int, formatted: bool = False) -> list[str]`
+    *   Generates `n` unique valid documents of the same type.
+    *   Example: `brdocs.generate_list("cnpj", 5, formatted=True)` → `["11.222.333/0001-81", ...]`
+*   `validate_docs(documents: list[tuple[str, str]]) -> list[bool]`
+    *   Validates a mixed-type batch. Each tuple is `(doc_type, value)`.
+    *   Example: `brdocs.validate_docs([("cpf", "529.982.247-25"), ("cnpj", "11.222.333/0001-81")])` → `[True, True]`
+
+### 3. Command-Line Interface (CLI)
 
 Build a zero-dependency CLI using Python's native `argparse`. Expose it via `[project.scripts]` in `pyproject.toml`.
 
@@ -79,28 +93,33 @@ Create custom types using `pydantic.functional_validators`.
 
 Broaden `brdocs` to be the undisputed standard by supporting the remaining common Brazilian documents:
 
-### 1. PIS / PASEP / NIT
+### 1. CNH (Carteira Nacional de Habilitação)
+*   **Structure:** 11 digits.
+*   **Logic:** Two-pass Modulo 11 check digit calculation (similar to CPF but distinct weights).
+*   **Tasks:** Build `is_valid_cnh()`, `generate_cnh()`, `format_cnh()`.
+
+### 2. PIS / PASEP / NIT
 *   **Structure:** 11 digits. Formatting: `XXX.XXXXX.XX-X`.
 *   **Logic:** Standard Modulo 11 validation check.
 *   **Tasks:** Build `is_valid_pis()`, `generate_pis()`, `format_pis()`.
 
-### 2. CNS (Cartão Nacional de Saúde / SUS)
+### 3. CNS (Cartão Nacional de Saúde / SUS)
 *   **Structure:** 15 digits.
-*   **Logic:** Heavily integrated logically (Modulo 11). Often starts with 1, 2, 7, 8, or 9. The check digit logic varies depending on the initial digits (Definitive vs. Temporary cards).
+*   **Logic:** Modulo 11. Often starts with 1, 2, 7, 8, or 9. The check digit logic varies depending on the initial digits (Definitive vs. Temporary cards).
 *   **Tasks:** Build `is_valid_cns()`, `generate_cns()`, `format_cns()` (`XXX XXXX XXXX XXXX`).
 
-### 3. Chave de Acesso NFe / CTe / MDFe
+### 4. Chave de Acesso NFe / CTe / MDFe
 *   **Structure:** 44 numeric digits.
 *   **Decomposition:** UF (2), AAMM (4), CNPJ (14), Model (2), Series (3), Number (9), Emission Type (1), Random Code (8), Check Digit (1).
 *   **Logic:** Standard Modulo 11 validation across all previous 43 digits.
 *   **Tasks:** Build `is_valid_nfe()`, `parse_nfe()` (highly valuable for parsing metadata directly out of invoices). 
 
-### 4. CEP (Postal Code)
+### 5. CEP (Postal Code)
 *   **Structure:** 8 digits.
 *   **Logic:** Mostly regex and sequence length. No complex algorithmic check digits, but vital for completeness.
 *   **Tasks:** Build `is_valid_cep()` and `format_cep()` (`XXXXX-XXX`).
 
-### 5. Documentos do Pix (Bacen)
+### 6. Documentos do Pix (Bacen)
 *   **Logic:** Validate standard string patterns conforming to Banco Central do Brasil.
 *   **Keys:** `CPF / CNPJ`, `Email`, `Telefone Celular` (+55...), `EVP` (Random UUID).
 *   **Tasks:** Return an enum or type identifying the validated PIX Key type.
