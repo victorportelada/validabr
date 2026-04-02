@@ -78,6 +78,9 @@ pandas = [
 polars = [
     { name = "polars" },
 ]
+pydantic = [
+    { name = "pydantic" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -103,8 +106,9 @@ requires-dist = [
     { name = "django", marker = "extra == 'django'", specifier = ">=5.0" },
     { name = "pandas", marker = "extra == 'pandas'", specifier = ">=2.0" },
     { name = "polars", marker = "extra == 'polars'", specifier = ">=1.0" },
+    { name = "pydantic", marker = "extra == 'pydantic'", specifier = ">=2.0" },
 ]
-provides-extras = ["django", "pandas", "polars"]
+provides-extras = ["django", "pandas", "polars", "pydantic"]
 
 [package.metadata.requires-dev]
 dev = [

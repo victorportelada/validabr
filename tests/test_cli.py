@@ -274,6 +274,16 @@ class TestCLIDirect:
         code = self._invoke(["validate", "ie", "000000000", "--state", "SP"], capsys)
         assert code != 0
 
+    def test_validate_pix_valid(self, capsys: pytest.CaptureFixture[str]) -> None:
+        code = self._invoke(["validate", "pix", "529.982.247-25"], capsys)
+        assert code == 0
+        out = capsys.readouterr().out
+        assert "CPF" in out
+
+    def test_validate_pix_invalid(self, capsys: pytest.CaptureFixture[str]) -> None:
+        code = self._invoke(["validate", "pix", "not-a-pix-key"], capsys)
+        assert code == 1
+
 
 class TestMaskCommand:
     def test_masks_cpf(self) -> None:

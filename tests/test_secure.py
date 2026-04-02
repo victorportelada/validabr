@@ -2,7 +2,15 @@ import logging
 
 import pytest
 
-from brdocs.secure import BRDocFilter, redact_text
+from brdocs.secure import (
+    BRDocFilter,
+    mask_cep,
+    mask_cnpj,
+    mask_cns,
+    mask_cpf,
+    mask_pis,
+    redact_text,
+)
 
 
 class TestRedactText:
@@ -131,3 +139,55 @@ class TestBRDocFilter:
         logger.setLevel(logging.DEBUG)
         logger.info("user 529.982.247-25 action")
         logger.removeHandler(handler)
+
+
+class TestMaskFunctions:
+    def test_mask_cpf_formatted(self) -> None:
+        assert mask_cpf("529.982.247-25") == "***.982.247-**"
+
+    def test_mask_cpf_raw(self) -> None:
+        assert mask_cpf("52998224725") == "***.982.247-**"
+
+    def test_mask_cpf_fallback(self) -> None:
+        result = mask_cpf("123")
+        assert result == "***"
+
+    def test_mask_cnpj_formatted(self) -> None:
+        assert mask_cnpj("11.222.333/0001-81") == "**.222.333/****-**"
+
+    def test_mask_cnpj_raw(self) -> None:
+        assert mask_cnpj("11222333000181") == "**.222.333/****-**"
+
+    def test_mask_cnpj_fallback(self) -> None:
+        assert mask_cnpj("123") == "***"
+
+    def test_mask_pis_formatted(self) -> None:
+        result = mask_pis("123.45678.90-1")
+        assert "**" in result
+
+    def test_mask_pis_raw(self) -> None:
+        result = mask_pis("12345678901")
+        assert "**" in result
+
+    def test_mask_pis_fallback(self) -> None:
+        assert mask_pis("123") == "***"
+
+    def test_mask_cep_formatted(self) -> None:
+        assert mask_cep("01310-100") == "01310-***"
+
+    def test_mask_cep_raw(self) -> None:
+        assert mask_cep("01310100") == "01310-***"
+
+    def test_mask_cep_fallback(self) -> None:
+        assert mask_cep("123") == "***"
+
+    def test_mask_cns_valid(self) -> None:
+        result = mask_cns("167441640030005")
+        assert result == "167 **** **** ****"
+
+    def test_mask_cns_formatted(self) -> None:
+        result = mask_cns("167 4416 4003 0005")
+        assert result == "167 **** **** ****"
+
+    def test_mask_cns_fallback(self) -> None:
+        assert mask_cns("123") == "***"

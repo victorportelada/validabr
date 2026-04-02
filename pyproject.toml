@@ -14,6 +14,7 @@ dependencies = []
 django = ["django>=5.0"]
 pandas = ["pandas>=2.0"]
 polars = ["polars>=1.0"]
+pydantic = ["pydantic>=2.0"]
 
 [project.scripts]
 brdocs = "brdocs.cli:main"
@@ -61,7 +62,7 @@ ignore_errors = true
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]
-branch = "main"
+branch = "master"
 build_command = "uv build"
 commit_message = "chore(release): v{version} [skip ci]"
 
