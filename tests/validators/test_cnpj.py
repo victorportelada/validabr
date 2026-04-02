@@ -1,7 +1,7 @@
 import pytest
 
-from brdocs.generators.cnpj import generate_cnpj
-from brdocs.validators.cnpj import is_valid_cnpj
+from brdocuments.generators.cnpj import generate_cnpj
+from brdocuments.validators.cnpj import is_valid_cnpj
 
 
 class TestCNPJValidator:

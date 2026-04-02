@@ -1,7 +1,7 @@
 import pytest
 
-from brdocs.generators.cnh import generate_cnh
-from brdocs.parsers.cnh import CNHData, format_cnh, parse_cnh
+from brdocuments.generators.cnh import generate_cnh
+from brdocuments.parsers.cnh import CNHData, format_cnh, parse_cnh
 
 
 class TestFormatCNH:

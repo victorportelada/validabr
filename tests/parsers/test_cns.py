@@ -1,7 +1,7 @@
 import pytest
 
-from brdocs.generators.cns import generate_cns
-from brdocs.parsers.cns import CNSData, format_cns, parse_cns
+from brdocuments.generators.cns import generate_cns
+from brdocuments.parsers.cns import CNSData, format_cns, parse_cns
 
 
 class TestFormatCNS:

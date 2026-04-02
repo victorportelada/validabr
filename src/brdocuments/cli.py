@@ -1,12 +1,12 @@
 """
-Command-line interface for brdocs.
+Command-line interface for brdocuments.
 
 Usage:
-    brdocs validate <type> <value> [--state XX]
-    brdocs generate <type> [--formatted] [--count N]
-    brdocs format   <type> <value> [--state XX]
-    brdocs parse    <type> <value> [--state XX]
-    brdocs mask     <type> <value>
+    brdocuments validate <type> <value> [--state XX]
+    brdocuments generate <type> [--formatted] [--count N]
+    brdocuments format   <type> <value> [--state XX]
+    brdocuments parse    <type> <value> [--state XX]
+    brdocuments mask     <type> <value>
 """
 
 import argparse
@@ -242,7 +242,7 @@ def _cmd_mask(args: argparse.Namespace) -> None:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="brdocs",
+        prog="brdocuments",
         description="Brazilian document validation, generation, and formatting toolkit.",
     )
     sub = parser.add_subparsers(dest="command", required=True)

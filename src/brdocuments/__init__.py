@@ -5,7 +5,7 @@ from .bulk import generate_list, validate_docs, validate_list
 from .enrich import CEPEnrichment, CNPJEnrichment, enrich_cep, enrich_cnpj
 
 try:
-    __version__: str = _pkg_version("brdocs")
+    __version__: str = _pkg_version("brdocuments")
 except PackageNotFoundError:
     __version__ = "0.0.0.dev0"
 

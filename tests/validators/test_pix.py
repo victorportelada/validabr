@@ -1,14 +1,14 @@
-from brdocs.validators.pix import PixKeyType, classify_pix
+from brdocuments.validators.pix import PixKeyType, classify_pix
 
 
 class TestClassifyPix:
     def test_valid_cpf(self) -> None:
-        from brdocs.generators.cpf import generate_cpf
+        from brdocuments.generators.cpf import generate_cpf
 
         assert classify_pix(generate_cpf()) is PixKeyType.CPF
 
     def test_valid_cnpj(self) -> None:
-        from brdocs.generators.cnpj import generate_cnpj
+        from brdocuments.generators.cnpj import generate_cnpj
 
         assert classify_pix(generate_cnpj()) is PixKeyType.CNPJ
 
@@ -62,7 +62,7 @@ class TestClassifyPix:
         import sys
         from unittest.mock import patch
 
-        with patch.dict(sys.modules, {"brdocs.validators": None}):
-            # With brdocs.validators unavailable, CPF/CNPJ lookup raises ImportError
+        with patch.dict(sys.modules, {"brdocuments.validators": None}):
+            # With brdocuments.validators unavailable, CPF/CNPJ lookup raises ImportError
             result = classify_pix("52998224725")
             assert result is None

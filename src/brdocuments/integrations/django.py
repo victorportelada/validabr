@@ -1,16 +1,16 @@
-"""Django integration for brdocs.
+"""Django integration for brdocuments.
 
 This module requires Django to be installed:
     pip install django>=4.0
 
 Model Fields:
-    from brdocs.integrations.django import CPFField
+    from brdocuments.integrations.django import CPFField
 
     class Person(models.Model):
         cpf = CPFField()
 
 Form Fields:
-    from brdocs.integrations.django import CPFFormField
+    from brdocuments.integrations.django import CPFFormField
 
     class PersonForm(forms.Form):
         cpf = CPFFormField()
@@ -26,11 +26,11 @@ try:
     from django.db import models as django_models
 except ImportError as exc:
     raise ImportError(
-        "Django is required for brdocs.integrations.django. "
-        "Install it with: pip install brdocs[django]"
+        "Django is required for brdocuments.integrations.django. "
+        "Install it with: pip install brdocuments[django]"
     ) from exc
 
-import brdocs
+import brdocuments
 
 __all__ = [
     "CNJField",
@@ -75,11 +75,11 @@ class CPFFormField(django_forms.CharField):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("CPF must have 11 digits.")
-        if not brdocs.is_valid_cpf(digits):
+        if not brdocuments.is_valid_cpf(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid CPF.")
-        return brdocs.format_cpf(digits)
+        return brdocuments.format_cpf(digits)
 
 
 class CPFField(django_models.CharField):  # type: ignore[type-arg]
@@ -117,11 +117,11 @@ class CPFField(django_models.CharField):  # type: ignore[type-arg]
             from django.core.exceptions import ValidationError
 
             raise ValidationError("CPF must have 11 digits.")
-        if not brdocs.is_valid_cpf(digits):
+        if not brdocuments.is_valid_cpf(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid CPF.")
-        return brdocs.format_cpf(digits)
+        return brdocuments.format_cpf(digits)
 
     def get_prep_value(self, value: Any) -> str | None:
         if value is None:
@@ -167,11 +167,11 @@ class CNPJFormField(django_forms.CharField):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("CNPJ must have 14 digits.")
-        if not brdocs.is_valid_cnpj(digits):
+        if not brdocuments.is_valid_cnpj(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid CNPJ.")
-        return brdocs.format_cnpj(digits)
+        return brdocuments.format_cnpj(digits)
 
 
 class CNPJField(django_models.CharField):  # type: ignore[type-arg]
@@ -209,11 +209,11 @@ class CNPJField(django_models.CharField):  # type: ignore[type-arg]
             from django.core.exceptions import ValidationError
 
             raise ValidationError("CNPJ must have 14 digits.")
-        if not brdocs.is_valid_cnpj(digits):
+        if not brdocuments.is_valid_cnpj(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid CNPJ.")
-        return brdocs.format_cnpj(digits)
+        return brdocuments.format_cnpj(digits)
 
     def get_prep_value(self, value: Any) -> str | None:
         if value is None:
@@ -259,11 +259,11 @@ class CNJFormField(django_forms.CharField):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("CNJ must have 20 digits.")
-        if not brdocs.is_valid_cnj(digits):
+        if not brdocuments.is_valid_cnj(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid CNJ.")
-        return brdocs.format_cnj(digits)
+        return brdocuments.format_cnj(digits)
 
 
 class CNJField(django_models.CharField):  # type: ignore[type-arg]
@@ -301,11 +301,11 @@ class CNJField(django_models.CharField):  # type: ignore[type-arg]
             from django.core.exceptions import ValidationError
 
             raise ValidationError("CNJ must have 20 digits.")
-        if not brdocs.is_valid_cnj(digits):
+        if not brdocuments.is_valid_cnj(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid CNJ.")
-        return brdocs.format_cnj(digits)
+        return brdocuments.format_cnj(digits)
 
     def get_prep_value(self, value: Any) -> str | None:
         if value is None:
@@ -351,11 +351,11 @@ class RenavamFormField(django_forms.CharField):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("RENAVAM must have 11 digits.")
-        if not brdocs.is_valid_renavam(digits):
+        if not brdocuments.is_valid_renavam(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid RENAVAM.")
-        return brdocs.format_renavam(digits)
+        return brdocuments.format_renavam(digits)
 
 
 class RenavamField(django_models.CharField):  # type: ignore[type-arg]
@@ -393,11 +393,11 @@ class RenavamField(django_models.CharField):  # type: ignore[type-arg]
             from django.core.exceptions import ValidationError
 
             raise ValidationError("RENAVAM must have 11 digits.")
-        if not brdocs.is_valid_renavam(digits):
+        if not brdocuments.is_valid_renavam(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid RENAVAM.")
-        return brdocs.format_renavam(digits)
+        return brdocuments.format_renavam(digits)
 
     def get_prep_value(self, value: Any) -> str | None:
         if value is None:
@@ -443,11 +443,11 @@ class TituloEleitorFormField(django_forms.CharField):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Título de Eleitor must have 12 digits.")
-        if not brdocs.is_valid_titulo_eleitor(digits):
+        if not brdocuments.is_valid_titulo_eleitor(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid Título de Eleitor.")
-        return brdocs.format_titulo_eleitor(digits)
+        return brdocuments.format_titulo_eleitor(digits)
 
 
 class TituloEleitorField(django_models.CharField):  # type: ignore[type-arg]
@@ -485,11 +485,11 @@ class TituloEleitorField(django_models.CharField):  # type: ignore[type-arg]
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Título de Eleitor must have 12 digits.")
-        if not brdocs.is_valid_titulo_eleitor(digits):
+        if not brdocuments.is_valid_titulo_eleitor(digits):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid Título de Eleitor.")
-        return brdocs.format_titulo_eleitor(digits)
+        return brdocuments.format_titulo_eleitor(digits)
 
     def get_prep_value(self, value: Any) -> str | None:
         if value is None:
@@ -540,11 +540,11 @@ class IEFormField(django_forms.CharField):
 
             raise ValidationError("Invalid input type.")
         digits = re.sub(r"\D", "", value)
-        if not brdocs.is_valid_ie(digits, self._state):
+        if not brdocuments.is_valid_ie(digits, self._state):
             from django.core.exceptions import ValidationError
 
             raise ValidationError("Invalid Inscrição Estadual.")
-        return brdocs.format_ie(digits, self._state)
+        return brdocuments.format_ie(digits, self._state)
 
 
 class IEField(django_models.CharField):  # type: ignore[type-arg]
@@ -582,11 +582,11 @@ class IEField(django_models.CharField):  # type: ignore[type-arg]
 
             raise ValidationError(f"Expected str, got {type(value).__name__}")
         digits = re.sub(r"\D", "", value)
-        if not brdocs.is_valid_ie(digits, self._state):
+        if not brdocuments.is_valid_ie(digits, self._state):
             from django.core.exceptions import ValidationError
 
             raise ValidationError(f"Invalid IE for state {self._state}.")
-        return brdocs.format_ie(digits, self._state)
+        return brdocuments.format_ie(digits, self._state)
 
     def get_prep_value(self, value: Any) -> str | None:
         if value is None:

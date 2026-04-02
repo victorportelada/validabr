@@ -1,5 +1,5 @@
-from brdocs.generators.cpf import generate_cpf
-from brdocs.validators.cpf import is_valid_cpf
+from brdocuments.generators.cpf import generate_cpf
+from brdocuments.validators.cpf import is_valid_cpf
 
 
 class TestGenerateCpf:
@@ -54,7 +54,7 @@ class TestGenerateCpfBranches:
                 return 5
             return _call_count % 7  # varied, not all-same
 
-        with patch("brdocs.generators.cpf.random.randint", side_effect=_side_effect):
+        with patch("brdocuments.generators.cpf.random.randint", side_effect=_side_effect):
             cpf = generate_cpf()
 
         assert isinstance(cpf, str)

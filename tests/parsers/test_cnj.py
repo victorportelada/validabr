@@ -1,7 +1,7 @@
 import pytest
 
-from brdocs.generators.cnj import generate_cnj
-from brdocs.parsers.cnj import CNJData, format_cnj, parse_cnj
+from brdocuments.generators.cnj import generate_cnj
+from brdocuments.parsers.cnj import CNJData, format_cnj, parse_cnj
 
 
 class TestFormatCNJ:

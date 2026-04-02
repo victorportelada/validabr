@@ -1,5 +1,5 @@
-from brdocs.generators.pis import generate_pis
-from brdocs.validators.pis import is_valid_pis
+from brdocuments.generators.pis import generate_pis
+from brdocuments.validators.pis import is_valid_pis
 
 
 class TestPISGenerator:
@@ -41,7 +41,7 @@ class TestPISGeneratorBranches:
                 return 5  # all-same → triggers continue
             return call_count % 7  # varied
 
-        with patch("brdocs.generators.pis.random.randint", side_effect=_side_effect):
+        with patch("brdocuments.generators.pis.random.randint", side_effect=_side_effect):
             pis = generate_pis()
 
         assert isinstance(pis, str)

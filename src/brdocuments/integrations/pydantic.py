@@ -1,4 +1,4 @@
-"""Pydantic v2 integration for brdocs."""
+"""Pydantic v2 integration for brdocuments."""
 
 from __future__ import annotations
 
@@ -9,11 +9,11 @@ try:
     from pydantic_core import core_schema
 except ImportError as exc:
     raise ImportError(
-        "Pydantic is required for brdocs.integrations.pydantic. "
-        "Install it with: pip install brdocs[pydantic]"
+        "Pydantic is required for brdocuments.integrations.pydantic. "
+        "Install it with: pip install brdocuments[pydantic]"
     ) from exc
 
-import brdocs
+import brdocuments
 
 
 class CPF(str):
@@ -26,9 +26,9 @@ class CPF(str):
         def validate(value: str) -> str:
             if not isinstance(value, str):
                 raise TypeError(f"CPF must be a string, got {type(value).__name__}")
-            if not brdocs.is_valid_cpf(value):
+            if not brdocuments.is_valid_cpf(value):
                 raise ValueError("Invalid CPF")
-            return brdocs.format_cpf(value)
+            return brdocuments.format_cpf(value)
 
         return core_schema.chain_schema(
             [
@@ -54,9 +54,9 @@ class CNPJ(str):
         def validate(value: str) -> str:
             if not isinstance(value, str):
                 raise TypeError(f"CNPJ must be a string, got {type(value).__name__}")
-            if not brdocs.is_valid_cnpj(value):
+            if not brdocuments.is_valid_cnpj(value):
                 raise ValueError("Invalid CNPJ")
-            return brdocs.format_cnpj(value)
+            return brdocuments.format_cnpj(value)
 
         return core_schema.chain_schema(
             [
@@ -82,9 +82,9 @@ class CNJ(str):
         def validate(value: str) -> str:
             if not isinstance(value, str):
                 raise TypeError(f"CNJ must be a string, got {type(value).__name__}")
-            if not brdocs.is_valid_cnj(value):
+            if not brdocuments.is_valid_cnj(value):
                 raise ValueError("Invalid CNJ")
-            return brdocs.format_cnj(value)
+            return brdocuments.format_cnj(value)
 
         return core_schema.chain_schema(
             [
@@ -110,9 +110,9 @@ class Renavam(str):
         def validate(value: str) -> str:
             if not isinstance(value, str):
                 raise TypeError(f"Renavam must be a string, got {type(value).__name__}")
-            if not brdocs.is_valid_renavam(value):
+            if not brdocuments.is_valid_renavam(value):
                 raise ValueError("Invalid Renavam")
-            return brdocs.format_renavam(value)
+            return brdocuments.format_renavam(value)
 
         return core_schema.chain_schema(
             [
@@ -138,9 +138,9 @@ class TituloEleitor(str):
         def validate(value: str) -> str:
             if not isinstance(value, str):
                 raise TypeError(f"TituloEleitor must be a string, got {type(value).__name__}")
-            if not brdocs.is_valid_titulo_eleitor(value):
+            if not brdocuments.is_valid_titulo_eleitor(value):
                 raise ValueError("Invalid TituloEleitor")
-            return brdocs.format_titulo_eleitor(value)
+            return brdocuments.format_titulo_eleitor(value)
 
         return core_schema.chain_schema(
             [
@@ -211,9 +211,9 @@ def ie_field(state: str) -> type:
             def validate(value: str) -> str:
                 if not isinstance(value, str):
                     raise TypeError(f"IE must be a string, got {type(value).__name__}")
-                if not brdocs.is_valid_ie(value, _state):
+                if not brdocuments.is_valid_ie(value, _state):
                     raise ValueError(f"Invalid IE for state {_state}")
-                return brdocs.format_ie(value, _state)
+                return brdocuments.format_ie(value, _state)
 
             return core_schema.chain_schema(
                 [

@@ -1,5 +1,5 @@
-from brdocs.generators.cnh import generate_cnh
-from brdocs.validators.cnh import is_valid_cnh
+from brdocuments.generators.cnh import generate_cnh
+from brdocuments.validators.cnh import is_valid_cnh
 
 
 class TestCNHValidator:
@@ -71,7 +71,7 @@ class TestCNHValidatorDSCBranch:
                 # The DSC=2 branch is rare; verify the validator handles it.
                 return 9 if call_count <= 8 else 1
 
-            with patch("brdocs.generators.cnh.random.randint", side_effect=_mock_randint):
+            with patch("brdocuments.generators.cnh.random.randint", side_effect=_mock_randint):
                 try:
                     cnh = generate_cnh()
                     assert is_valid_cnh(cnh) is True

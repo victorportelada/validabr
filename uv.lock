@@ -63,8 +63,8 @@ wheels = [
 ]
 
 [[package]]
-name = "brdocs"
-version = "0.1.0"
+name = "brdocuments"
+version = "1.0.0"
 source = { editable = "." }
 
 [package.optional-dependencies]

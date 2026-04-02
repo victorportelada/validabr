@@ -1,4 +1,4 @@
-from brdocs.validators.titulo_eleitor import is_valid_titulo_eleitor
+from brdocuments.validators.titulo_eleitor import is_valid_titulo_eleitor
 
 
 class TestTituloEleitorValidator:
@@ -66,7 +66,7 @@ class TestTituloEleitorBranchCoverage:
 
     def test_v1_mismatch_returns_false(self) -> None:
         """v1 != expected_v1 -> return False (line 50)."""
-        from brdocs.generators.titulo_eleitor import generate_titulo_eleitor
+        from brdocuments.generators.titulo_eleitor import generate_titulo_eleitor
 
         titulo = generate_titulo_eleitor()
         # Flip digit at position 10 (v1)
@@ -79,7 +79,7 @@ class TestGoRemainderZero:
     """Cover the GO _go validator branch where remainder==0 -> check=0 (line 124)."""
 
     def test_go_remainder_0_branch(self) -> None:
-        from brdocs.validators.ie import _go
+        from brdocuments.validators.ie import _go
 
         weights = [9, 8, 7, 6, 5, 4, 3, 2]
         for prefix in [10, 11, 15]:

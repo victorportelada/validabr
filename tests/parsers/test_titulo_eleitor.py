@@ -1,7 +1,11 @@
 import pytest
 
-from brdocs.generators.titulo_eleitor import generate_titulo_eleitor
-from brdocs.parsers.titulo_eleitor import TituloData, format_titulo_eleitor, parse_titulo_eleitor
+from brdocuments.generators.titulo_eleitor import generate_titulo_eleitor
+from brdocuments.parsers.titulo_eleitor import (
+    TituloData,
+    format_titulo_eleitor,
+    parse_titulo_eleitor,
+)
 
 
 class TestFormatTituloEleitor:

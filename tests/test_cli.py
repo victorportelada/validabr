@@ -8,7 +8,7 @@ import pytest
 
 def _run(*args: str) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
-        [sys.executable, "-m", "brdocs.cli", *args],
+        [sys.executable, "-m", "brdocuments.cli", *args],
         capture_output=True,
         text=True,
     )
@@ -120,9 +120,9 @@ class TestCLIDirect:
     """Direct invocation tests for coverage (subprocess tests verify exit codes)."""
 
     def _invoke(self, argv: list[str], capsys: pytest.CaptureFixture[str]) -> int:
-        from brdocs.cli import main
+        from brdocuments.cli import main
 
-        with patch("sys.argv", ["brdocs", *argv]):
+        with patch("sys.argv", ["brdocuments", *argv]):
             try:
                 main()
                 return 0
@@ -225,9 +225,9 @@ class TestCLIDirect:
         assert capsys.readouterr().out.strip() == "*" * len("0012345678-9")
 
     def test_validate_ie_with_state(self, capsys: pytest.CaptureFixture[str]) -> None:
-        import brdocs
+        import brdocuments
 
-        raw = brdocs.generate_ie("SP")
+        raw = brdocuments.generate_ie("SP")
         code = self._invoke(["validate", "ie", raw, "--state", "SP"], capsys)
         assert code == 0
 
@@ -236,9 +236,9 @@ class TestCLIDirect:
         assert code != 0
 
     def test_format_ie_with_state(self, capsys: pytest.CaptureFixture[str]) -> None:
-        import brdocs
+        import brdocuments
 
-        raw = brdocs.generate_ie("SP")
+        raw = brdocuments.generate_ie("SP")
         code = self._invoke(["format", "ie", raw, "--state", "SP"], capsys)
         assert code == 0
 
@@ -247,9 +247,9 @@ class TestCLIDirect:
         assert code != 0
 
     def test_parse_ie_with_state(self, capsys: pytest.CaptureFixture[str]) -> None:
-        import brdocs
+        import brdocuments
 
-        raw = brdocs.generate_ie("SP")
+        raw = brdocuments.generate_ie("SP")
         code = self._invoke(["parse", "ie", raw, "--state", "SP"], capsys)
         assert code == 0
         data = json.loads(capsys.readouterr().out)
@@ -307,9 +307,9 @@ class TestMaskFallbackBranches:
     """Cover the else-branch of mask functions (non-standard-length input)."""
 
     def _invoke(self, argv: list[str], capsys: pytest.CaptureFixture[str]) -> int:
-        from brdocs.cli import main
+        from brdocuments.cli import main
 
-        with patch("sys.argv", ["brdocs", *argv]):
+        with patch("sys.argv", ["brdocuments", *argv]):
             try:
                 main()
                 return 0
@@ -327,9 +327,9 @@ class TestMaskFallbackBranches:
         assert capsys.readouterr().out.strip() == "***"
 
     def test_mask_pis_valid(self, capsys: pytest.CaptureFixture[str]) -> None:
-        import brdocs
+        import brdocuments
 
-        raw = brdocs.generate_pis()
+        raw = brdocuments.generate_pis()
         code = self._invoke(["mask", "pis", raw], capsys)
         assert code == 0
         out = capsys.readouterr().out.strip()

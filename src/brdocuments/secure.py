@@ -174,7 +174,7 @@ class BRDocFilter(logging.Filter):
     Example::
 
         import logging
-        from brdocs.secure import BRDocFilter
+        from brdocuments.secure import BRDocFilter
 
         handler = logging.StreamHandler()
         handler.addFilter(BRDocFilter())

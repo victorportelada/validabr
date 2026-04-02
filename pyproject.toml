@@ -1,6 +1,6 @@
 
 [project]
-name = "brdocs"
+name = "brdocuments"
 version = "1.0.0"
 description = "Enterprise toolkit for validating, parsing, enriching, and anonymizing Brazilian documents (LGPD-ready)"
 readme = "README.md"
@@ -17,7 +17,7 @@ polars = ["polars>=1.0"]
 pydantic = ["pydantic>=2.0"]
 
 [project.scripts]
-brdocs = "brdocs.cli:main"
+brdocuments = "brdocuments.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.9.27,<0.10.0"]
@@ -58,6 +58,10 @@ addopts = "--cov=src --cov-report=term-missing"
 strict = true
 [[tool.mypy.overrides]]
 module = "tests.*"
+ignore_errors = true
+
+[[tool.mypy.overrides]]
+module = "brdocuments.integrations.polars"
 ignore_errors = true
 
 [tool.semantic_release]

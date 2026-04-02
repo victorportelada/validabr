@@ -1,5 +1,5 @@
-from brdocs.generators.pis import generate_pis
-from brdocs.validators.pis import is_valid_pis
+from brdocuments.generators.pis import generate_pis
+from brdocuments.validators.pis import is_valid_pis
 
 
 class TestPISValidator:

@@ -1,4 +1,4 @@
-from brdocs.generators.cns import generate_cns
+from brdocuments.generators.cns import generate_cns
 
 
 class TestCNSGenerator:
@@ -13,13 +13,13 @@ class TestCNSGenerator:
         assert fmt.count(" ") == 3
 
     def test_generated_is_valid(self) -> None:
-        from brdocs.validators.cns import is_valid_cns
+        from brdocuments.validators.cns import is_valid_cns
 
         for _ in range(10):
             assert is_valid_cns(generate_cns()) is True
 
     def test_formatted_round_trip(self) -> None:
-        from brdocs.validators.cns import is_valid_cns
+        from brdocuments.validators.cns import is_valid_cns
 
         for _ in range(10):
             fmt = generate_cns(formatted=True)
@@ -41,7 +41,7 @@ class TestCNSGenerator:
                 return 1
             return call_count % 10
 
-        with patch("brdocs.generators.cns.random.randint", side_effect=_side_effect):
+        with patch("brdocuments.generators.cns.random.randint", side_effect=_side_effect):
             cns = generate_cns()
 
         assert isinstance(cns, str)

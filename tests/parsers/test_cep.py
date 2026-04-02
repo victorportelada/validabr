@@ -1,7 +1,7 @@
 import pytest
 
-from brdocs.generators.cep import generate_cep
-from brdocs.parsers.cep import CEPData, format_cep, parse_cep
+from brdocuments.generators.cep import generate_cep
+from brdocuments.parsers.cep import CEPData, format_cep, parse_cep
 
 
 class TestFormatCEP:
