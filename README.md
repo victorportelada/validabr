@@ -1,9 +1,9 @@
-# brdocs
+# validabr
 
 **The** Python library for validating, generating, formatting, and masking Brazilian documents — CPF to CNH to Pix keys.
 
-[![PyPI](https://img.shields.io/pypi/v/brdocs.svg)](https://pypi.org/project/brdocs/)
-[![Python](https://img.shields.io/pypi/pyversions/brdocs.svg)](https://pypi.org/project/brdocs/)
+[![PyPI](https://img.shields.io/pypi/v/validabr.svg)](https://pypi.org/project/validabr/)
+[![Python](https://img.shields.io/pypi/pyversions/validabr.svg)](https://pypi.org/project/validabr/)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)]()
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
@@ -12,14 +12,14 @@
 ## Installation
 
 ```bash
-pip install brdocs
-pip install brdocs[django]     # Django validators and form fields
-pip install brdocs[pydantic]   # Pydantic v2 custom types
-pip install brdocs[pandas]    # Pandas Series accessor
-pip install brdocs[polars]     # Polars DataFrame expressions
+pip install validabr
+pip install validabr[django]     # Django validators and form fields
+pip install validabr[pydantic]   # Pydantic v2 custom types
+pip install validabr[pandas]    # Pandas Series accessor
+pip install validabr[polars]     # Polars DataFrame expressions
 ```
 
-Core `brdocs` has **zero dependencies** — stdlib only.
+Core `validabr` has **zero dependencies** — stdlib only.
 
 ---
 
@@ -47,24 +47,24 @@ Core `brdocs` has **zero dependencies** — stdlib only.
 ### Core API — Validate, Generate, Format, Parse
 
 ```python
-import brdocs
+import validabr
 
 # Validate
-brdocs.is_valid_cpf("529.982.247-25")        # True
-brdocs.is_valid_cnpj("11.222.333/0001-81")    # True
-brdocs.is_valid_ie("110.042.490.114", "SP")   # True
+validabr.is_valid_cpf("529.982.247-25")        # True
+validabr.is_valid_cnpj("11.222.333/0001-81")    # True
+validabr.is_valid_ie("110.042.490.114", "SP")   # True
 
 # Generate
-brdocs.generate_cpf()                          # "52998224725"
-brdocs.generate_cpf(formatted=True)           # "529.982.247-25"
-brdocs.generate_ie("MG")                      # "062.107.170.0110"
+validabr.generate_cpf()                          # "52998224725"
+validabr.generate_cpf(formatted=True)           # "529.982.247-25"
+validabr.generate_ie("MG")                      # "062.107.170.0110"
 
 # Format — idempotent (handles raw or formatted input)
-brdocs.format_cpf("52998224725")              # "529.982.247-25"
-brdocs.format_cnpj("11222333000181")          # "11.222.333/0001-81"
+validabr.format_cpf("52998224725")              # "529.982.247-25"
+validabr.format_cnpj("11222333000181")          # "11.222.333/0001-81"
 
 # Parse — returns NamedTuple with structured fields
-data = brdocs.parse_cpf("529.982.247-25")
+data = validabr.parse_cpf("529.982.247-25")
 print(data.root, data.check_digits)            # "52998224" "25"
 ```
 
@@ -72,27 +72,27 @@ print(data.root, data.check_digits)            # "52998224" "25"
 
 ```python
 # Same-type batch
-brdocs.validate_list("cpf", ["529.982.247-25", "000.000.000-00"])  # [True, False]
-brdocs.generate_list("cnpj", 3, formatted=True)
+validabr.validate_list("cpf", ["529.982.247-25", "000.000.000-00"])  # [True, False]
+validabr.generate_list("cnpj", 3, formatted=True)
 
 # Mixed-type batch
-brdocs.validate_docs([("cpf", "529.982.247-25"), ("cnpj", "11.222.333/0001-81")])  # [True, True]
+validabr.validate_docs([("cpf", "529.982.247-25"), ("cnpj", "11.222.333/0001-81")])  # [True, True]
 ```
 
 ### CLI
 
 ```bash
-brdocs validate cpf 529.982.247-25        # exit 0
-brdocs generate cpf --formatted           # 529.982.247-25
-brdocs format cpf 52998224725              # 529.982.247-25
-brdocs parse cpf 529.982.247-25          # {"root": "52998224", "check_digits": "25", ...}
-brdocs mask cpf 529.982.247-25            # ***.982.247-**
+validabr validate cpf 529.982.247-25        # exit 0
+validabr generate cpf --formatted           # 529.982.247-25
+validabr format cpf 52998224725              # 529.982.247-25
+validabr parse cpf 529.982.247-25          # {"root": "52998224", "check_digits": "25", ...}
+validabr mask cpf 529.982.247-25            # ***.982.247-**
 ```
 
 ### LGPD / Secure — Mask & Redact
 
 ```python
-from brdocs import mask_cpf, mask_cnpj, redact_text, BRDocFilter
+from validabr import mask_cpf, mask_cnpj, redact_text, BRDocFilter
 
 mask_cpf("529.982.247-25")    # "***.982.247-**"
 mask_cnpj("11.222.333/0001-81")  # "**.222.333/****-**"
@@ -108,7 +108,7 @@ logging.getLogger().addFilter(BRDocFilter())
 ### Data Enrichment
 
 ```python
-from brdocs import enrich_cnpj, enrich_cep
+from validabr import enrich_cnpj, enrich_cep
 
 info = enrich_cnpj("11222333000181")
 # CNPJEnrichmentData(cnpj='...', razao_social='...', cnae='...', municipio='...', uf='...', ...)
@@ -121,32 +121,32 @@ cep = enrich_cep("01310-100")
 
 ```python
 import pandas as pd
-import brdocs.integrations.pandas  # registers .brdocs accessor
+import validabr.integrations.pandas  # registers .validabr accessor
 
 df = pd.DataFrame({"cpf": ["529.982.247-25", "000.000.000-00"]})
-df["valid"] = df["cpf"].brdocs.is_valid_cpf()   # bool Series
-df["formatted"] = df["cpf"].brdocs.format_cpf()  # str Series
-df["masked"] = df["cpf"].brdocs.mask_cpf()       # str Series
-df["tipo_pix"] = df["pix"].brdocs.classify_pix()  # "CPF" | "CNPJ" | "EMAIL" | "PHONE" | ""
+df["valid"] = df["cpf"].validabr.is_valid_cpf()   # bool Series
+df["formatted"] = df["cpf"].validabr.format_cpf()  # str Series
+df["masked"] = df["cpf"].validabr.mask_cpf()       # str Series
+df["tipo_pix"] = df["pix"].validabr.classify_pix()  # "CPF" | "CNPJ" | "EMAIL" | "PHONE" | ""
 ```
 
 ### Polars
 
 ```python
 import polars as pl
-import brdocs.integrations.polars  # registers .brdocs on Expr
+import validabr.integrations.polars  # registers .validabr on Expr
 
 df = pl.DataFrame({"cpf": ["529.982.247-25", "000.000.000-00"]})
-df.select(pl.col("cpf").brdocs.is_valid_cpf())   # Expr → [True, False]
-df.select(pl.col("cpf").brdocs.format_cpf())    # Expr → ["529.982.247-25", ...]
-df.select(pl.col("cpf").brdocs.mask_cpf())      # Expr → ["***.982.247-**", ...]
-df.select(pl.col("pix").brdocs.classify_pix())  # Expr → ["CPF", "CNPJ", "EMAIL", "PHONE", ""]
+df.select(pl.col("cpf").validabr.is_valid_cpf())   # Expr → [True, False]
+df.select(pl.col("cpf").validabr.format_cpf())    # Expr → ["529.982.247-25", ...]
+df.select(pl.col("cpf").validabr.mask_cpf())      # Expr → ["***.982.247-**", ...]
+df.select(pl.col("pix").validabr.classify_pix())  # Expr → ["CPF", "CNPJ", "EMAIL", "PHONE", ""]
 ```
 
 ### Django
 
 ```python
-from brdocs.integrations.django import CPFField, CNPJField, BRDocumentField
+from validabr.integrations.django import CPFField, CNPJField, BRDocumentField
 
 class Person(models.Model):
     cpf = CPFField(unique=True)          # validates + strips formatting on save
@@ -158,7 +158,7 @@ class Person(models.Model):
 
 ```python
 from pydantic import BaseModel
-from brdocs.integrations.pydantic import CPF, CNPJ, IE, CNJ, Renavam, TituloEleitor
+from validabr.integrations.pydantic import CPF, CNPJ, IE, CNJ, Renavam, TituloEleitor
 
 class Pessoa(BaseModel):
     cpf: CPF

@@ -1,7 +1,7 @@
 
 [project]
 name = "validabr"
-version = "1.0.0"
+version = "1.0.1"
 description = "Enterprise toolkit for validating, parsing, enriching, and anonymizing Brazilian documents (LGPD-ready)"
 readme = "README.md"
 authors = [
