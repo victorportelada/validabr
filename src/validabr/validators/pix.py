@@ -39,7 +39,7 @@ def classify_pix(key: str) -> PixKeyType | None:
         return PixKeyType.EMAIL
 
     try:
-        from brdocuments.validators import is_valid_cnpj, is_valid_cpf
+        from validabr.validators import is_valid_cnpj, is_valid_cpf
     except ImportError:
         return None
 

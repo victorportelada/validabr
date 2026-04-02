@@ -2,7 +2,7 @@ import json
 import urllib.error
 from unittest.mock import MagicMock, patch
 
-from brdocuments.enrich import CEPEnrichment, CNPJEnrichment, enrich_cep, enrich_cnpj
+from validabr.enrich import CEPEnrichment, CNPJEnrichment, enrich_cep, enrich_cnpj
 
 _URLOPEN = "urllib.request.urlopen"
 

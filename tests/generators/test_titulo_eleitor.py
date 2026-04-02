@@ -1,5 +1,5 @@
-from brdocuments.generators.titulo_eleitor import generate_titulo_eleitor
-from brdocuments.validators.titulo_eleitor import is_valid_titulo_eleitor
+from validabr.generators.titulo_eleitor import generate_titulo_eleitor
+from validabr.validators.titulo_eleitor import is_valid_titulo_eleitor
 
 
 class TestGenerateTituloEleitor:

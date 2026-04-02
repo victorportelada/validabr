@@ -1,4 +1,4 @@
-"""Tests for brdocuments Pydantic v2 integration."""
+"""Tests for validabr Pydantic v2 integration."""
 
 import pytest
 
@@ -6,8 +6,8 @@ pydantic = pytest.importorskip("pydantic")
 
 from pydantic import BaseModel, ValidationError  # noqa: E402
 
-import brdocuments  # noqa: E402
-from brdocuments.integrations.pydantic import (  # noqa: E402
+import validabr  # noqa: E402
+from validabr.integrations.pydantic import (  # noqa: E402
     CNJ,
     CNPJ,
     CPF,
@@ -71,9 +71,9 @@ class TestCPFType:
         class M(BaseModel):
             cpf: CPF
 
-        raw = brdocuments.generate_cpf()
+        raw = validabr.generate_cpf()
         m = M(cpf=raw)
-        assert brdocuments.is_valid_cpf(m.cpf)
+        assert validabr.is_valid_cpf(m.cpf)
 
 
 # ---------------------------------------------------------------------------
@@ -121,9 +121,9 @@ class TestCNPJType:
         class M(BaseModel):
             cnpj: CNPJ
 
-        raw = brdocuments.generate_cnpj()
+        raw = validabr.generate_cnpj()
         m = M(cnpj=raw)
-        assert brdocuments.is_valid_cnpj(m.cnpj)
+        assert validabr.is_valid_cnpj(m.cnpj)
 
 
 # ---------------------------------------------------------------------------
@@ -136,9 +136,9 @@ class TestCNJType:
         class M(BaseModel):
             cnj: CNJ
 
-        raw = brdocuments.generate_cnj()
+        raw = validabr.generate_cnj()
         m = M(cnj=raw)
-        assert brdocuments.is_valid_cnj(m.cnj)
+        assert validabr.is_valid_cnj(m.cnj)
 
     def test_rejects_invalid_cnj(self) -> None:
         class M(BaseModel):
@@ -165,9 +165,9 @@ class TestRenavamType:
         class M(BaseModel):
             renavam: Renavam
 
-        raw = brdocuments.generate_renavam()
+        raw = validabr.generate_renavam()
         m = M(renavam=raw)
-        assert brdocuments.is_valid_renavam(m.renavam)
+        assert validabr.is_valid_renavam(m.renavam)
 
     def test_rejects_invalid_renavam(self) -> None:
         class M(BaseModel):
@@ -194,9 +194,9 @@ class TestTituloEleitorType:
         class M(BaseModel):
             titulo: TituloEleitor
 
-        raw = brdocuments.generate_titulo_eleitor()
+        raw = validabr.generate_titulo_eleitor()
         m = M(titulo=raw)
-        assert brdocuments.is_valid_titulo_eleitor(m.titulo)
+        assert validabr.is_valid_titulo_eleitor(m.titulo)
 
     def test_rejects_invalid_titulo(self) -> None:
         class M(BaseModel):
@@ -220,19 +220,19 @@ class TestTituloEleitorType:
 
 class TestIEType:
     def test_accepts_valid_ie_with_state(self) -> None:
-        from brdocuments.integrations.pydantic import ie_field
+        from validabr.integrations.pydantic import ie_field
 
         SP_IE = ie_field("SP")
 
         class M(BaseModel):
             ie: SP_IE
 
-        raw = brdocuments.generate_ie("SP")
+        raw = validabr.generate_ie("SP")
         m = M(ie=raw)
-        assert brdocuments.is_valid_ie(m.ie, "SP")
+        assert validabr.is_valid_ie(m.ie, "SP")
 
     def test_rejects_invalid_ie(self) -> None:
-        from brdocuments.integrations.pydantic import ie_field
+        from validabr.integrations.pydantic import ie_field
 
         SP_IE = ie_field("SP")
 
@@ -243,7 +243,7 @@ class TestIEType:
             M(ie="000000000")
 
     def test_json_schema_has_title(self) -> None:
-        from brdocuments.integrations.pydantic import ie_field
+        from validabr.integrations.pydantic import ie_field
 
         SP_IE = ie_field("SP")
 
@@ -265,17 +265,17 @@ class TestCompositeModel:
             cpf: CPF
             cnpj: CNPJ
 
-        cpf = brdocuments.generate_cpf(formatted=True)
-        cnpj = brdocuments.generate_cnpj(formatted=True)
+        cpf = validabr.generate_cpf(formatted=True)
+        cnpj = validabr.generate_cnpj(formatted=True)
         client = Client(cpf=cpf, cnpj=cnpj)
-        assert brdocuments.is_valid_cpf(client.cpf)
-        assert brdocuments.is_valid_cnpj(client.cnpj)
+        assert validabr.is_valid_cpf(client.cpf)
+        assert validabr.is_valid_cnpj(client.cnpj)
 
     def test_serialization_roundtrip(self) -> None:
         class M(BaseModel):
             cpf: CPF
 
-        raw = brdocuments.generate_cpf()
+        raw = validabr.generate_cpf()
         m = M(cpf=raw)
         dumped = m.model_dump()
         m2 = M(**dumped)

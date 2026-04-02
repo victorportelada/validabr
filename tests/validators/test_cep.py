@@ -1,4 +1,4 @@
-from brdocuments.validators.cep import is_valid_cep
+from validabr.validators.cep import is_valid_cep
 
 
 class TestCEPValidator:

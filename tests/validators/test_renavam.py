@@ -1,4 +1,4 @@
-from brdocuments.validators.renavam import is_valid_renavam
+from validabr.validators.renavam import is_valid_renavam
 
 
 class TestRenavamValidator:
@@ -41,7 +41,7 @@ class TestRenavamValidator:
         # Use 00000000001 (padded): digits=[0,0,0,0,0,0,0,0,0,0,1] padded
         # Let's try 10000000000: total = 1*3 = 3, %11=3, check=8 — not 1
         # Brute-force: total%11==1 → try leading zeros with a single digit
-        from brdocuments.validators.renavam import is_valid_renavam
+        from validabr.validators.renavam import is_valid_renavam
 
         weights = [3, 2, 9, 8, 7, 6, 5, 4, 3, 2]
         found = None

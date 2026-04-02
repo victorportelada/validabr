@@ -1,5 +1,5 @@
-from brdocuments.generators.renavam import generate_renavam
-from brdocuments.validators.renavam import is_valid_renavam
+from validabr.generators.renavam import generate_renavam
+from validabr.validators.renavam import is_valid_renavam
 
 
 class TestGenerateRenavam:

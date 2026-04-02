@@ -39,13 +39,13 @@ def _generate_nfe() -> str:
 
 class TestParseNFE:
     def test_returns_nfe_data(self) -> None:
-        from brdocuments.parsers.nfe import NFEData, parse_nfe
+        from validabr.parsers.nfe import NFEData, parse_nfe
 
         result = parse_nfe(_generate_nfe())
         assert isinstance(result, NFEData)
 
     def test_fields_from_valid_key(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         key = _generate_nfe()
         result = parse_nfe(key)
@@ -60,7 +60,7 @@ class TestParseNFE:
         assert len(result.check_digit) == 1
 
     def test_accepts_formatted_input(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         raw = _generate_nfe()
         formatted = " ".join([raw[i * 5 : (i + 1) * 5] for i in range(8)] + [raw[40:44]])
@@ -69,7 +69,7 @@ class TestParseNFE:
         assert result.check_digit == raw[43]
 
     def test_round_trip(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         key = _generate_nfe()
         result = parse_nfe(key)
@@ -87,32 +87,32 @@ class TestParseNFE:
         assert reconstructed == key
 
     def test_is_immutable(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         result = parse_nfe(_generate_nfe())
         with pytest.raises(AttributeError):
             result.uf_code = "00"  # type: ignore
 
     def test_raises_on_short_input(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         with pytest.raises(ValueError, match="44 digits"):
             parse_nfe("1" * 43)
 
     def test_raises_on_long_input(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         with pytest.raises(ValueError, match="44 digits"):
             parse_nfe("1" * 45)
 
     def test_raises_on_non_string(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         with pytest.raises(ValueError, match="Expected str"):
             parse_nfe(1111111111111111111111111111111111111111111111)  # type: ignore
 
     def test_raises_on_empty(self) -> None:
-        from brdocuments.parsers.nfe import parse_nfe
+        from validabr.parsers.nfe import parse_nfe
 
         with pytest.raises(ValueError, match="44 digits"):
             parse_nfe("")
@@ -120,7 +120,7 @@ class TestParseNFE:
 
 class TestFormatNFE:
     def test_formats_raw_digits(self) -> None:
-        from brdocuments.parsers.nfe import format_nfe
+        from validabr.parsers.nfe import format_nfe
 
         raw = _generate_nfe()
         fmt = format_nfe(raw)
@@ -128,7 +128,7 @@ class TestFormatNFE:
         assert len(fmt) == 52
 
     def test_formats_already_formatted(self) -> None:
-        from brdocuments.parsers.nfe import format_nfe
+        from validabr.parsers.nfe import format_nfe
 
         raw = _generate_nfe()
         fmt1 = format_nfe(raw)
@@ -136,13 +136,13 @@ class TestFormatNFE:
         assert fmt1 == fmt2
 
     def test_raises_on_short_input(self) -> None:
-        from brdocuments.parsers.nfe import format_nfe
+        from validabr.parsers.nfe import format_nfe
 
         with pytest.raises(ValueError, match="44 digits"):
             format_nfe("1" * 43)
 
     def test_raises_on_non_string(self) -> None:
-        from brdocuments.parsers.nfe import format_nfe
+        from validabr.parsers.nfe import format_nfe
 
         with pytest.raises(ValueError, match="Expected str"):
             format_nfe(1111111111111111111111111111111111111111111111)  # type: ignore

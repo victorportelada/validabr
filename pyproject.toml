@@ -1,6 +1,6 @@
 
 [project]
-name = "brdocuments"
+name = "validabr"
 version = "1.0.0"
 description = "Enterprise toolkit for validating, parsing, enriching, and anonymizing Brazilian documents (LGPD-ready)"
 readme = "README.md"
@@ -17,7 +17,7 @@ polars = ["polars>=1.0"]
 pydantic = ["pydantic>=2.0"]
 
 [project.scripts]
-brdocuments = "brdocuments.cli:main"
+validabr = "validabr.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.9.27,<0.10.0"]
@@ -61,7 +61,7 @@ module = "tests.*"
 ignore_errors = true
 
 [[tool.mypy.overrides]]
-module = "brdocuments.integrations.polars"
+module = "validabr.integrations.polars"
 ignore_errors = true
 
 [tool.semantic_release]

@@ -1,12 +1,12 @@
 """
-Command-line interface for brdocuments.
+Command-line interface for validabr.
 
 Usage:
-    brdocuments validate <type> <value> [--state XX]
-    brdocuments generate <type> [--formatted] [--count N]
-    brdocuments format   <type> <value> [--state XX]
-    brdocuments parse    <type> <value> [--state XX]
-    brdocuments mask     <type> <value>
+    validabr validate <type> <value> [--state XX]
+    validabr generate <type> [--formatted] [--count N]
+    validabr format   <type> <value> [--state XX]
+    validabr parse    <type> <value> [--state XX]
+    validabr mask     <type> <value>
 """
 
 import argparse
@@ -242,7 +242,7 @@ def _cmd_mask(args: argparse.Namespace) -> None:
 
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        prog="brdocuments",
+        prog="validabr",
         description="Brazilian document validation, generation, and formatting toolkit.",
     )
     sub = parser.add_subparsers(dest="command", required=True)

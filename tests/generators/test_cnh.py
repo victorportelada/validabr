@@ -1,5 +1,5 @@
-from brdocuments.generators.cnh import generate_cnh
-from brdocuments.validators.cnh import is_valid_cnh
+from validabr.generators.cnh import generate_cnh
+from validabr.validators.cnh import is_valid_cnh
 
 
 class TestGenerateCNH:
@@ -38,7 +38,7 @@ class TestGenerateCNHBranches:
                 return 5  # all-same base → triggers continue
             return call_count % 7  # varied
 
-        with patch("brdocuments.generators.cnh.random.randint", side_effect=_side_effect):
+        with patch("validabr.generators.cnh.random.randint", side_effect=_side_effect):
             cnh = generate_cnh()
 
         assert isinstance(cnh, str)

@@ -1,5 +1,5 @@
-from brdocuments.generators.cep import generate_cep
-from brdocuments.validators.cep import is_valid_cep
+from validabr.generators.cep import generate_cep
+from validabr.validators.cep import is_valid_cep
 
 
 class TestCEPGenerator:
@@ -40,7 +40,7 @@ class TestCEPGeneratorBranches:
                 return 5  # all-same → triggers continue
             return call_count % 7  # varied
 
-        with patch("brdocuments.generators.cep.random.randint", side_effect=_side_effect):
+        with patch("validabr.generators.cep.random.randint", side_effect=_side_effect):
             cep = generate_cep()
 
         assert isinstance(cep, str)

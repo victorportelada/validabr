@@ -1,7 +1,7 @@
 import pytest
 
-from brdocuments.generators.titulo_eleitor import generate_titulo_eleitor
-from brdocuments.parsers.titulo_eleitor import (
+from validabr.generators.titulo_eleitor import generate_titulo_eleitor
+from validabr.parsers.titulo_eleitor import (
     TituloData,
     format_titulo_eleitor,
     parse_titulo_eleitor,

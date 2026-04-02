@@ -1,7 +1,7 @@
 import pytest
 
-from brdocuments.generators.cns import generate_cns
-from brdocuments.parsers.cns import CNSData, format_cns, parse_cns
+from validabr.generators.cns import generate_cns
+from validabr.parsers.cns import CNSData, format_cns, parse_cns
 
 
 class TestFormatCNS:

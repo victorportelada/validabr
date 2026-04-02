@@ -1,7 +1,7 @@
 import pytest
 
-from brdocuments.generators.renavam import generate_renavam
-from brdocuments.parsers.renavam import RenavamData, format_renavam, parse_renavam
+from validabr.generators.renavam import generate_renavam
+from validabr.parsers.renavam import RenavamData, format_renavam, parse_renavam
 
 
 class TestFormatRENAVAM:

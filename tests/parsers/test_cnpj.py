@@ -1,7 +1,7 @@
 import pytest
 
-from brdocuments.generators.cnpj import generate_cnpj
-from brdocuments.parsers.cnpj import CNPJData, format_cnpj, parse_cnpj
+from validabr.generators.cnpj import generate_cnpj
+from validabr.parsers.cnpj import CNPJData, format_cnpj, parse_cnpj
 
 
 class TestFormatCNPJ:

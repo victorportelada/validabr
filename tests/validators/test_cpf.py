@@ -1,7 +1,7 @@
 import pytest
 
-from brdocuments.generators.cpf import generate_cpf
-from brdocuments.validators.cpf import is_valid_cpf
+from validabr.generators.cpf import generate_cpf
+from validabr.validators.cpf import is_valid_cpf
 
 
 class TestCPFValidator:

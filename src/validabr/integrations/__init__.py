@@ -1,11 +1,11 @@
 # Integrations module — optional, requires external dependencies (pydantic, django).
-# It is always safe to `import brdocuments` without these dependencies installed.
+# It is always safe to `import validabr` without these dependencies installed.
 # Importing this sub-package only fails if the relevant framework is absent.
 
 __all__: list[str] = []
 
 try:
-    from brdocuments.integrations.django import (
+    from validabr.integrations.django import (
         CNJField,
         CNJFormField,
         CNPJField,
@@ -38,7 +38,7 @@ except ImportError:
     pass
 
 try:
-    from brdocuments.integrations.pydantic import (
+    from validabr.integrations.pydantic import (
         CNJ,
         CNPJ,
         CPF,
@@ -61,14 +61,14 @@ except ImportError:
     pass
 
 try:
-    from brdocuments.integrations.pandas import BRDocsAccessor
+    from validabr.integrations.pandas import BRDocsAccessor
 
     __all__ += ["BRDocsAccessor"]
 except ImportError:
     pass
 
 try:
-    from brdocuments.integrations.polars import BRDocsExpr
+    from validabr.integrations.polars import BRDocsExpr
 
     __all__ += ["BRDocsExpr"]
 except ImportError:

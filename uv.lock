@@ -63,7 +63,7 @@ wheels = [
 ]
 
 [[package]]
-name = "brdocuments"
+name = "validabr"
 version = "1.0.0"
 source = { editable = "." }
 

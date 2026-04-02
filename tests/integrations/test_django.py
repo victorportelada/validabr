@@ -1,4 +1,4 @@
-"""Tests for brdocuments Django integration."""
+"""Tests for validabr Django integration."""
 
 import pytest
 
@@ -22,8 +22,8 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db import models
 
-import brdocuments
-from brdocuments.integrations.django import (
+import validabr
+from validabr.integrations.django import (
     CNJField,
     CNPJField,
     CNPJFormField,
@@ -103,10 +103,10 @@ class TestCPFModelField:
             class Meta:
                 app_label = "test"
 
-        raw = brdocuments.generate_cpf()
+        raw = validabr.generate_cpf()
         p = Person(cpf=raw)
         p.full_clean()
-        assert brdocuments.is_valid_cpf(p.cpf)
+        assert validabr.is_valid_cpf(p.cpf)
 
 
 # ---------------------------------------------------------------------------
@@ -173,10 +173,10 @@ class TestCNJModelField:
             class Meta:
                 app_label = "test"
 
-        raw = brdocuments.generate_cnj()
+        raw = validabr.generate_cnj()
         p = Process(cnj=raw)
         p.full_clean()
-        assert brdocuments.is_valid_cnj(p.cnj)
+        assert validabr.is_valid_cnj(p.cnj)
 
     def test_rejects_invalid_cnj(self) -> None:
         class Process(models.Model):
@@ -203,10 +203,10 @@ class TestRenavamModelField:
             class Meta:
                 app_label = "test"
 
-        raw = brdocuments.generate_renavam()
+        raw = validabr.generate_renavam()
         v = Vehicle(renavam=raw)
         v.full_clean()
-        assert brdocuments.is_valid_renavam(v.renavam)
+        assert validabr.is_valid_renavam(v.renavam)
 
     def test_rejects_invalid_renavam(self) -> None:
         class Vehicle(models.Model):
@@ -233,10 +233,10 @@ class TestTituloEleitorModelField:
             class Meta:
                 app_label = "test"
 
-        raw = brdocuments.generate_titulo_eleitor()
+        raw = validabr.generate_titulo_eleitor()
         v = Voter(titulo=raw)
         v.full_clean()
-        assert brdocuments.is_valid_titulo_eleitor(v.titulo)
+        assert validabr.is_valid_titulo_eleitor(v.titulo)
 
     def test_rejects_invalid_titulo(self) -> None:
         class Voter(models.Model):
@@ -263,10 +263,10 @@ class TestIEModelField:
             class Meta:
                 app_label = "test"
 
-        raw = brdocuments.generate_ie("SP")
+        raw = validabr.generate_ie("SP")
         e = Establishment(ie=raw)
         e.full_clean()
-        assert brdocuments.is_valid_ie(e.ie, "SP")
+        assert validabr.is_valid_ie(e.ie, "SP")
 
     def test_rejects_invalid_ie(self) -> None:
         class Establishment(models.Model):
@@ -286,7 +286,7 @@ class TestIEModelField:
             class Meta:
                 app_label = "test"
 
-        raw = brdocuments.generate_ie("RJ")
+        raw = validabr.generate_ie("RJ")
         e = Establishment(ie=raw)
         with pytest.raises(ValidationError):
             e.full_clean()
@@ -298,10 +298,10 @@ class TestIEModelField:
             class Meta:
                 app_label = "test"
 
-        raw = brdocuments.generate_ie("MG")
+        raw = validabr.generate_ie("MG")
         e = Establishment(ie=raw)
         e.full_clean()
-        assert brdocuments.is_valid_ie(e.ie, "MG")
+        assert validabr.is_valid_ie(e.ie, "MG")
 
 
 # ---------------------------------------------------------------------------
@@ -342,10 +342,10 @@ class TestIEFormField:
         class EstablishmentForm(forms.Form):
             ie = IEFormField(state="SP")
 
-        raw = brdocuments.generate_ie("SP")
+        raw = validabr.generate_ie("SP")
         f = EstablishmentForm({"ie": raw})
         assert f.is_valid(), f.errors
-        assert brdocuments.is_valid_ie(f.cleaned_data["ie"], "SP")
+        assert validabr.is_valid_ie(f.cleaned_data["ie"], "SP")
 
     def test_rejects_invalid_ie(self) -> None:
         class EstablishmentForm(forms.Form):

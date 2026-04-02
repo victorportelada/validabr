@@ -1,7 +1,7 @@
 import pytest
 
-from brdocuments.generators.pis import generate_pis
-from brdocuments.parsers.pis import PISData, format_pis, parse_pis
+from validabr.generators.pis import generate_pis
+from validabr.parsers.pis import PISData, format_pis, parse_pis
 
 
 class TestFormatPIS:

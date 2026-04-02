@@ -1,4 +1,4 @@
-from brdocuments.validators.cnj import is_valid_cnj
+from validabr.validators.cnj import is_valid_cnj
 
 
 class TestCNJValidator:

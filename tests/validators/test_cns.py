@@ -1,5 +1,5 @@
-from brdocuments.generators.cns import generate_cns
-from brdocuments.validators.cns import is_valid_cns
+from validabr.generators.cns import generate_cns
+from validabr.validators.cns import is_valid_cns
 
 
 class TestCNSValidator:

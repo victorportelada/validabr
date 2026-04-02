@@ -2,7 +2,7 @@ import logging
 
 import pytest
 
-from brdocuments.secure import (
+from validabr.secure import (
     BRDocFilter,
     mask_cep,
     mask_cnpj,

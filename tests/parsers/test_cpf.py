@@ -1,7 +1,7 @@
 import pytest
 
-from brdocuments.generators.cpf import generate_cpf
-from brdocuments.parsers.cpf import CPFData, format_cpf, parse_cpf
+from validabr.generators.cpf import generate_cpf
+from validabr.parsers.cpf import CPFData, format_cpf, parse_cpf
 
 
 class TestFormatCPF:
