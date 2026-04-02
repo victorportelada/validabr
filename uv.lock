@@ -63,70 +63,6 @@ wheels = [
 ]
 
 [[package]]
-name = "validabr"
-version = "1.0.0"
-source = { editable = "." }
-
-[package.optional-dependencies]
-django = [
-    { name = "django", version = "5.2.12", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "django", version = "6.0.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
-]
-pandas = [
-    { name = "pandas" },
-]
-polars = [
-    { name = "polars" },
-]
-pydantic = [
-    { name = "pydantic" },
-]
-
-[package.dev-dependencies]
-dev = [
-    { name = "django-stubs" },
-    { name = "mypy" },
-    { name = "pandas-stubs", version = "2.3.3.260113", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
-    { name = "pandas-stubs", version = "3.0.0.260204", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
-    { name = "pre-commit" },
-    { name = "pytest" },
-    { name = "pytest-cov" },
-    { name = "python-dotenv" },
-    { name = "python-semantic-release" },
-    { name = "ruff" },
-    { name = "streamlit" },
-    { name = "watchdog" },
-]
-polars = [
-    { name = "polars" },
-]
-
-[package.metadata]
-requires-dist = [
-    { name = "django", marker = "extra == 'django'", specifier = ">=5.0" },
-    { name = "pandas", marker = "extra == 'pandas'", specifier = ">=2.0" },
-    { name = "polars", marker = "extra == 'polars'", specifier = ">=1.0" },
-    { name = "pydantic", marker = "extra == 'pydantic'", specifier = ">=2.0" },
-]
-provides-extras = ["django", "pandas", "polars", "pydantic"]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "django-stubs", specifier = ">=6.0.2" },
-    { name = "mypy", specifier = ">=1.19.1" },
-    { name = "pandas-stubs", specifier = ">=2.3.3.260113" },
-    { name = "pre-commit", specifier = ">=4.5.1" },
-    { name = "pytest", specifier = ">=9.0.2" },
-    { name = "pytest-cov", specifier = ">=7.1.0" },
-    { name = "python-dotenv", specifier = ">=1.2.2" },
-    { name = "python-semantic-release", specifier = ">=10.5.3" },
-    { name = "ruff", specifier = ">=0.15.8" },
-    { name = "streamlit", specifier = ">=1.55.0" },
-    { name = "watchdog", specifier = ">=6.0.0" },
-]
-polars = [{ name = "polars", specifier = ">=1.39.3" }]
-
-[[package]]
 name = "cachetools"
 version = "7.0.5"
 source = { registry = "https://pypi.org/simple" }
@@ -2134,6 +2070,70 @@ sdist = { url = "https://files.pythonhosted.org/packages/c7/24/5f1b3bdffd70275f6
 wheels = [
     { url = "https://files.pythonhosted.org/packages/39/08/aaaad47bc4e9dc8c725e68f9d04865dbcb2052843ff09c97b08904852d84/urllib3-2.6.3-py3-none-any.whl", hash = "sha256:bf272323e553dfb2e87d9bfd225ca7b0f467b919d7bbd355436d3fd37cb0acd4", size = 131584, upload-time = "2026-01-07T16:24:42.685Z" },
 ]
+
+[[package]]
+name = "validabr"
+version = "1.1.0"
+source = { editable = "." }
+
+[package.optional-dependencies]
+django = [
+    { name = "django", version = "5.2.12", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "django", version = "6.0.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+pandas = [
+    { name = "pandas" },
+]
+polars = [
+    { name = "polars" },
+]
+pydantic = [
+    { name = "pydantic" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "django-stubs" },
+    { name = "mypy" },
+    { name = "pandas-stubs", version = "2.3.3.260113", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "pandas-stubs", version = "3.0.0.260204", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+    { name = "pre-commit" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "python-dotenv" },
+    { name = "python-semantic-release" },
+    { name = "ruff" },
+    { name = "streamlit" },
+    { name = "watchdog" },
+]
+polars = [
+    { name = "polars" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "django", marker = "extra == 'django'", specifier = ">=5.0" },
+    { name = "pandas", marker = "extra == 'pandas'", specifier = ">=2.0" },
+    { name = "polars", marker = "extra == 'polars'", specifier = ">=1.0" },
+    { name = "pydantic", marker = "extra == 'pydantic'", specifier = ">=2.0" },
+]
+provides-extras = ["django", "pandas", "polars", "pydantic"]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "django-stubs", specifier = ">=6.0.2" },
+    { name = "mypy", specifier = ">=1.19.1" },
+    { name = "pandas-stubs", specifier = ">=2.3.3.260113" },
+    { name = "pre-commit", specifier = ">=4.5.1" },
+    { name = "pytest", specifier = ">=9.0.2" },
+    { name = "pytest-cov", specifier = ">=7.1.0" },
+    { name = "python-dotenv", specifier = ">=1.2.2" },
+    { name = "python-semantic-release", specifier = ">=10.5.3" },
+    { name = "ruff", specifier = ">=0.15.8" },
+    { name = "streamlit", specifier = ">=1.55.0" },
+    { name = "watchdog", specifier = ">=6.0.0" },
+]
+polars = [{ name = "polars", specifier = ">=1.39.3" }]
 
 [[package]]
 name = "virtualenv"

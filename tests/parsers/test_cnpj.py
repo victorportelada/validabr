@@ -24,11 +24,11 @@ class TestFormatCNPJ:
             assert len(formatted) == 18
 
     def test_raises_on_short_input(self) -> None:
-        with pytest.raises(ValueError, match="14 digits"):
+        with pytest.raises(ValueError, match="14 characters"):
             format_cnpj("1234567890123")
 
     def test_raises_on_long_input(self) -> None:
-        with pytest.raises(ValueError, match="14 digits"):
+        with pytest.raises(ValueError, match="14 characters"):
             format_cnpj("123456789012345")
 
     def test_raises_on_non_string(self) -> None:
@@ -36,7 +36,7 @@ class TestFormatCNPJ:
             format_cnpj(11222333000181)  # type: ignore
 
     def test_raises_on_empty(self) -> None:
-        with pytest.raises(ValueError, match="14 digits"):
+        with pytest.raises(ValueError, match="14 characters"):
             format_cnpj("")
 
     def test_output_structure(self) -> None:
@@ -92,11 +92,11 @@ class TestParseCNPJ:
             result.root = "00000000"  # type: ignore
 
     def test_raises_on_short_input(self) -> None:
-        with pytest.raises(ValueError, match="14 digits"):
+        with pytest.raises(ValueError, match="14 characters"):
             parse_cnpj("1234567890123")
 
     def test_raises_on_long_input(self) -> None:
-        with pytest.raises(ValueError, match="14 digits"):
+        with pytest.raises(ValueError, match="14 characters"):
             parse_cnpj("123456789012345")
 
     def test_raises_on_non_string(self) -> None:
@@ -104,5 +104,42 @@ class TestParseCNPJ:
             parse_cnpj(11222333000181)  # type: ignore
 
     def test_raises_on_empty(self) -> None:
-        with pytest.raises(ValueError, match="14 digits"):
+        with pytest.raises(ValueError, match="14 characters"):
             parse_cnpj("")
+
+
+class TestCNPJAlfanumericoParser:
+    VALID_ALFA = "12ABC34501DE35"
+    VALID_ALFA_FORMATTED = "12.ABC.345/01DE-35"
+
+    def test_parse_alfa_unformatted(self) -> None:
+        result = parse_cnpj(self.VALID_ALFA)
+        assert result.root == "12ABC345"
+        assert result.branch == "01DE"
+        assert result.check_digits == "35"
+
+    def test_parse_alfa_formatted(self) -> None:
+        result = parse_cnpj(self.VALID_ALFA_FORMATTED)
+        assert result.root == "12ABC345"
+        assert result.branch == "01DE"
+        assert result.check_digits == "35"
+
+    def test_format_alfa_unformatted(self) -> None:
+        assert format_cnpj(self.VALID_ALFA) == self.VALID_ALFA_FORMATTED
+
+    def test_format_alfa_already_formatted(self) -> None:
+        assert format_cnpj(self.VALID_ALFA_FORMATTED) == self.VALID_ALFA_FORMATTED
+
+    def test_format_alfa_lowercase_normalized(self) -> None:
+        assert format_cnpj("12abc34501de35") == self.VALID_ALFA_FORMATTED
+
+    def test_round_trip_generate_parse_alfa(self) -> None:
+        from validabr.generators.cnpj import generate_cnpj
+
+        for _ in range(10):
+            raw = generate_cnpj(alfa=True)
+            parsed = parse_cnpj(raw)
+            assert len(parsed.root) == 8
+            assert len(parsed.branch) == 4
+            assert len(parsed.check_digits) == 2
+            assert parsed.root + parsed.branch + parsed.check_digits == raw.upper()

@@ -40,6 +40,47 @@ class TestGenerateCnpj:
             assert cnpj[8:12] == "0001"
 
 
+class TestGenerateCnpjAlfa:
+    def test_returns_string(self) -> None:
+
+        cnpj = generate_cnpj(alfa=True)
+        assert isinstance(cnpj, str)
+        assert len(cnpj) == 14
+
+    def test_may_contain_letters(self) -> None:
+        results = [generate_cnpj(alfa=True) for _ in range(50)]
+        assert any(not r.isdigit() for r in results)
+
+    def test_branch_still_0001(self) -> None:
+        for _ in range(10):
+            cnpj = generate_cnpj(alfa=True)
+            assert cnpj[8:12] == "0001"
+
+    def test_dv_always_digits(self) -> None:
+        for _ in range(10):
+            cnpj = generate_cnpj(alfa=True)
+            assert cnpj[12:].isdigit()
+
+    def test_formatted_alfa_structure(self) -> None:
+        cnpj = generate_cnpj(formatted=True, alfa=True)
+        assert cnpj[2] == "."
+        assert cnpj[6] == "."
+        assert "/" in cnpj
+        assert "-" in cnpj
+
+    def test_generated_alfa_is_valid(self) -> None:
+        from validabr.validators.cnpj import is_valid_cnpj
+
+        for _ in range(20):
+            assert is_valid_cnpj(generate_cnpj(alfa=True)) is True
+
+    def test_no_excluded_letters(self) -> None:
+        excluded = set("IOUQF")
+        for _ in range(50):
+            cnpj = generate_cnpj(alfa=True)
+            assert not (excluded & set(cnpj[:12]))
+
+
 class TestGenerateCnpjBranches:
     """Cover internal loop branches via mocking."""
 
