@@ -22,14 +22,13 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "tag=v$VERSION" >> $GITHUB_OUTPUT
 
-      - name: Check if release already exists
+      - name: Check if version already on PyPI
         id: check
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if gh release view ${{ steps.version.outputs.tag }} &>/dev/null; then
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://pypi.org/pypi/validabr/${{ steps.version.outputs.version }}/json)
+          if [ "$STATUS" = "200" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
-            echo "Release ${{ steps.version.outputs.tag }} already exists — skipping."
+            echo "v${{ steps.version.outputs.version }} already on PyPI — skipping."
           else
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
@@ -58,4 +57,5 @@ jobs:
           gh release create ${{ steps.version.outputs.tag }} \
             --title "${{ steps.version.outputs.tag }}" \
             --generate-notes \
-            --target master
+            --target master \
+            --force
