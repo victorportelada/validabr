@@ -5,6 +5,7 @@ from .cnpj import generate_cnpj
 from .cns import generate_cns
 from .cpf import generate_cpf
 from .ie import generate_ie
+from .nfe import generate_nfe
 from .pis import generate_pis
 from .renavam import generate_renavam
 from .titulo_eleitor import generate_titulo_eleitor
@@ -17,6 +18,7 @@ __all__ = [
     "generate_cns",
     "generate_cpf",
     "generate_ie",
+    "generate_nfe",
     "generate_pis",
     "generate_renavam",
     "generate_titulo_eleitor",

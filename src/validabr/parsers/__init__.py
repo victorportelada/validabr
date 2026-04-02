@@ -7,6 +7,7 @@ from .cpf import CPFData, format_cpf, parse_cpf
 from .ie import IEData, format_ie, parse_ie
 from .nfe import NFEData, format_nfe, parse_nfe
 from .pis import PISData, format_pis, parse_pis
+from .pix import PixEmailData, PixEVPData, PixPhoneData, format_pix, parse_pix
 from .renavam import RenavamData, format_renavam, parse_renavam
 from .titulo_eleitor import TituloData, format_titulo_eleitor, parse_titulo_eleitor
 
@@ -20,6 +21,9 @@ __all__ = [
     "IEData",
     "NFEData",
     "PISData",
+    "PixEVPData",
+    "PixEmailData",
+    "PixPhoneData",
     "RenavamData",
     "TituloData",
     "format_cep",
@@ -31,6 +35,7 @@ __all__ = [
     "format_ie",
     "format_nfe",
     "format_pis",
+    "format_pix",
     "format_renavam",
     "format_titulo_eleitor",
     "parse_cep",
@@ -42,6 +47,7 @@ __all__ = [
     "parse_ie",
     "parse_nfe",
     "parse_pis",
+    "parse_pix",
     "parse_renavam",
     "parse_titulo_eleitor",
 ]

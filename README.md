@@ -30,7 +30,7 @@ Core `validabr` has **zero dependencies** — stdlib only.
 | Document | Validate | Generate | Format | Parse | Mask |
 |----------|:-------:|:--------:|:------:|:-----:|:----:|
 | CPF | `is_valid_cpf` | `generate_cpf` | `format_cpf` | `parse_cpf` | `mask_cpf` |
-| CNPJ | `is_valid_cnpj` | `generate_cnpj` | `format_cnpj` | `parse_cnpj` | `mask_cnpj` |
+| CNPJ (+ alfanumérico) | `is_valid_cnpj` | `generate_cnpj` | `format_cnpj` | `parse_cnpj` | `mask_cnpj` |
 | CNJ | `is_valid_cnj` | `generate_cnj` | `format_cnj` | `parse_cnj` | — |
 | IE (27 states) | `is_valid_ie` | `generate_ie` | `format_ie` | `parse_ie` | — |
 | RENAVAM | `is_valid_renavam` | `generate_renavam` | `format_renavam` | `parse_renavam` | — |
@@ -39,8 +39,8 @@ Core `validabr` has **zero dependencies** — stdlib only.
 | PIS/PASEP | `is_valid_pis` | `generate_pis` | `format_pis` | `parse_pis` | — |
 | CEP | `is_valid_cep` | — | `format_cep` | `parse_cep` | — |
 | CNS (SUS) | `is_valid_cns` | `generate_cns` | `format_cns` | `parse_cns` | — |
-| NFe/CTe (44 digits) | `is_valid_nfe` | — | `format_nfe` | `parse_nfe` | — |
-| Chave Pix | `classify_pix` | — | — | — | — |
+| NFe/CTe/NFC-e (44 digits) | `is_valid_nfe` | `generate_nfe` | `format_nfe` | `parse_nfe` | — |
+| Chave Pix | `classify_pix` | — | `format_pix` | `parse_pix` | — |
 
 ---
 
