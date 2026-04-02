@@ -1,7 +1,7 @@
 import re
 
-from pybrdoc.generators.cnj import generate_cnj
-from pybrdoc.validators.cnj import is_valid_cnj
+from brdocs.generators.cnj import generate_cnj
+from brdocs.validators.cnj import is_valid_cnj
 
 
 class TestCNJGenerator:

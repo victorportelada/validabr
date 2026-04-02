@@ -1,7 +1,7 @@
 import pytest
 
-from pybrdoc.generators.ie import generate_ie
-from pybrdoc.validators.ie import _VALID_STATES, is_valid_ie
+from brdocs.generators.ie import generate_ie
+from brdocs.validators.ie import _VALID_STATES, is_valid_ie
 
 
 class TestIsValidIeGuardClauses:
@@ -142,7 +142,7 @@ class TestApRangeBranches:
 
     def test_ap_range_3000001_to_3017000(self) -> None:
         # p=5, d_extra=0 branch
-        from pybrdoc.validators.ie import _ap
+        from brdocs.validators.ie import _ap
 
         # Build a base number inside [3_000_001, 3_017_000] and compute check
         base = [0, 3, 0, 0, 0, 0, 0, 1]  # numeric value 03000001
@@ -158,7 +158,7 @@ class TestApRangeBranches:
 
     def test_ap_range_3017001_to_5014026(self) -> None:
         # p=6, d_extra=1 branch
-        from pybrdoc.validators.ie import _ap
+        from brdocs.validators.ie import _ap
 
         base = [0, 3, 0, 1, 7, 0, 0, 1]  # numeric value 03017001
         n = int("".join(str(x) for x in base))
@@ -177,7 +177,7 @@ class TestApRangeBranches:
         # p=9, d_extra=0 branch (n outside both special ranges)
         # 3_000_001..3_017_000 → p=5; 3_017_001..5_014_026 → p=6; else → p=9
         # Use 06000000 (= 6,000,000) which is above 5_014_026
-        from pybrdoc.validators.ie import _ap
+        from brdocs.validators.ie import _ap
 
         base = [0, 3, 6, 0, 0, 0, 0, 0]  # numeric value 03600000 = 3,600,000
         # 3,600,000 is between 3_017_001 and 5_014_026 → STILL in range 2
@@ -203,7 +203,7 @@ class TestAmTotalLessThan11:
 
     def test_am_total_less_than_11(self) -> None:
         # Force a total < 11: use all zeros — total=0
-        from pybrdoc.validators.ie import _am
+        from brdocs.validators.ie import _am
 
         base = [0] * 8  # total=0
         total = 0
@@ -222,8 +222,8 @@ class TestBa8DigitFormat:
     """Cover the 8-digit branch and wrong-length rejection in _ba."""
 
     def test_ba_accepts_8_digit_ie(self) -> None:
-        from pybrdoc.generators.ie import _gen_ba
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.generators.ie import _gen_ba
+        from brdocs.validators.ie import is_valid_ie
 
         ie = _gen_ba(digits=8)
         assert is_valid_ie(ie, "BA") is True
@@ -235,7 +235,7 @@ class TestBa8DigitFormat:
 
     def test_ba_mod11_path(self) -> None:
         # First digit NOT in {0,1,2,3,4,5,8} → mod_10=False → mod-11 path
-        from pybrdoc.validators.ie import _ba
+        from brdocs.validators.ie import _ba
 
         # d[0]=6, triggers mod-11 path
         base = [6, 5, 4, 3, 2, 1]  # 6 digits for 8-digit IE (base_len=6)
@@ -254,16 +254,16 @@ class TestPeFormats:
     """Cover both 9-digit (old) and 14-digit (new) PE formats."""
 
     def test_pe_old_format_9_digits(self) -> None:
-        from pybrdoc.generators.ie import _gen_pe
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.generators.ie import _gen_pe
+        from brdocs.validators.ie import is_valid_ie
 
         ie = _gen_pe(new_format=False)
         assert len(ie) == 9
         assert is_valid_ie(ie, "PE") is True
 
     def test_pe_new_format_14_digits(self) -> None:
-        from pybrdoc.generators.ie import _gen_pe
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.generators.ie import _gen_pe
+        from brdocs.validators.ie import is_valid_ie
 
         ie = _gen_pe(new_format=True)
         assert len(ie) == 14
@@ -273,7 +273,7 @@ class TestPeFormats:
         assert is_valid_ie("12345678", "PE") is False
 
     def test_pe_old_format_c1_failure(self) -> None:
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.validators.ie import is_valid_ie
 
         # Craft an IE where c1 is wrong
         "000000001" + "0" * 0  # 9 digits, crafted
@@ -282,7 +282,7 @@ class TestPeFormats:
 
     def test_pe_new_format_c1_failure_short_circuits(self) -> None:
         # 14 digit IE with wrong first check digit
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.validators.ie import is_valid_ie
 
         bad_ie = "0" * 12 + "99"  # 14 digits with unlikely correct checks
         result = is_valid_ie(bad_ie, "PE")
@@ -293,8 +293,8 @@ class TestRnLongFormat:
     """Cover the 10-digit (long) format for RN."""
 
     def test_rn_long_format_10_digits(self) -> None:
-        from pybrdoc.generators.ie import _gen_rn
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.generators.ie import _gen_rn
+        from brdocs.validators.ie import is_valid_ie
 
         ie = _gen_rn(long=True)
         assert len(ie) == 10
@@ -308,8 +308,8 @@ class TestRoShortFormat:
     """Cover the 9-digit (old) format for RO."""
 
     def test_ro_short_format_9_digits(self) -> None:
-        from pybrdoc.generators.ie import _gen_ro
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.generators.ie import _gen_ro
+        from brdocs.validators.ie import is_valid_ie
 
         ie = _gen_ro(long=False)
         assert len(ie) == 9
@@ -323,8 +323,8 @@ class TestMgC1Failure:
     """Check that MG rejects an IE where the first check digit is wrong."""
 
     def test_mg_c1_wrong_fails(self) -> None:
-        from pybrdoc.generators.ie import _gen_mg
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.generators.ie import _gen_mg
+        from brdocs.validators.ie import is_valid_ie
 
         ie = _gen_mg()
         assert len(ie) == 13
@@ -338,8 +338,8 @@ class TestSpC1Failure:
     """Check that SP rejects an IE where the first check digit is wrong."""
 
     def test_sp_c1_wrong_fails(self) -> None:
-        from pybrdoc.generators.ie import _gen_sp
-        from pybrdoc.validators.ie import is_valid_ie
+        from brdocs.generators.ie import _gen_sp
+        from brdocs.validators.ie import is_valid_ie
 
         ie = _gen_sp()
         assert len(ie) == 12

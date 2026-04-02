@@ -1,10 +1,9 @@
-# pybrdoc
+# brdocs
 
-Zero-dependency Python library for validating, generating, and formatting Brazilian document numbers — CPF, CNPJ, CNJ, IE (all 27 states), RENAVAM, and Título de Eleitor.
+**The** Python library for validating, generating, formatting, and masking Brazilian documents — CPF to CNH to Pix keys.
 
-[![PyPI](https://img.shields.io/pypi/v/pybrdoc.svg)](https://pypi.org/project/pybrdoc/)
-[![Python](https://img.shields.io/pypi/pyversions/pybrdoc.svg)](https://pypi.org/project/pybrdoc/)
-[![CI](https://github.com/victorportelada/pybrdoc/actions/workflows/ci.yml/badge.svg)](https://github.com/victorportelada/pybrdoc/actions)
+[![PyPI](https://img.shields.io/pypi/v/brdocs.svg)](https://pypi.org/project/brdocs/)
+[![Python](https://img.shields.io/pypi/pyversions/brdocs.svg)](https://pypi.org/project/brdocs/)
 [![Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)]()
 [![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
 
@@ -13,127 +12,169 @@ Zero-dependency Python library for validating, generating, and formatting Brazil
 ## Installation
 
 ```bash
-pip install pybrdoc
+pip install brdocs
+pip install brdocs[django]     # Django validators and form fields
+pip install brdocs[pydantic]   # Pydantic v2 custom types
+pip install brdocs[pandas]    # Pandas Series accessor
+pip install brdocs[polars]     # Polars DataFrame expressions
 ```
 
-```bash
-uv add pybrdoc
-```
+Core `brdocs` has **zero dependencies** — stdlib only.
+
+---
+
+## Supported Documents
+
+| Document | Validate | Generate | Format | Parse | Mask |
+|----------|:-------:|:--------:|:------:|:-----:|:----:|
+| CPF | `is_valid_cpf` | `generate_cpf` | `format_cpf` | `parse_cpf` | `mask_cpf` |
+| CNPJ | `is_valid_cnpj` | `generate_cnpj` | `format_cnpj` | `parse_cnpj` | `mask_cnpj` |
+| CNJ | `is_valid_cnj` | `generate_cnj` | `format_cnj` | `parse_cnj` | — |
+| IE (27 states) | `is_valid_ie` | `generate_ie` | `format_ie` | `parse_ie` | — |
+| RENAVAM | `is_valid_renavam` | `generate_renavam` | `format_renavam` | `parse_renavam` | — |
+| Título de Eleitor | `is_valid_titulo_eleitor` | `generate_titulo_eleitor` | `format_titulo_eleitor` | `parse_titulo_eleitor` | — |
+| CNH | `is_valid_cnh` | `generate_cnh` | `format_cnh` | `parse_cnh` | — |
+| PIS/PASEP | `is_valid_pis` | `generate_pis` | `format_pis` | `parse_pis` | — |
+| CEP | `is_valid_cep` | — | `format_cep` | `parse_cep` | — |
+| CNS (SUS) | `is_valid_cns` | `generate_cns` | `format_cns` | `parse_cns` | — |
+| NFe/CTe (44 digits) | `is_valid_nfe` | — | `format_nfe` | `parse_nfe` | — |
+| Chave Pix | `classify_pix` | — | — | — | — |
 
 ---
 
 ## Quick Start
 
+### Core API — Validate, Generate, Format, Parse
+
 ```python
-import pybrdoc
+import brdocs
 
 # Validate
-pybrdoc.is_valid_cpf("529.982.247-25")        # True
-pybrdoc.is_valid_cnpj("11.222.333/0001-81")   # True
-pybrdoc.is_valid_ie("110.042.490.114", "SP")  # True
+brdocs.is_valid_cpf("529.982.247-25")        # True
+brdocs.is_valid_cnpj("11.222.333/0001-81")    # True
+brdocs.is_valid_ie("110.042.490.114", "SP")   # True
 
-# Format (strips punctuation and re-applies canonical mask)
-pybrdoc.format_cpf("52998224725")             # "529.982.247-25"
-pybrdoc.format_cnpj("11222333000181")         # "11.222.333/0001-81"
-pybrdoc.format_ie("110042490114", "SP")       # "110.042.490.114"
+# Generate
+brdocs.generate_cpf()                          # "52998224725"
+brdocs.generate_cpf(formatted=True)           # "529.982.247-25"
+brdocs.generate_ie("MG")                      # "062.107.170.0110"
 
-# Generate valid random documents
-pybrdoc.generate_cpf()                        # e.g. "52998224725"
-pybrdoc.generate_cpf(formatted=True)          # e.g. "529.982.247-25"
-pybrdoc.generate_ie("MG")                     # e.g. "0621071700110"
+# Format — idempotent (handles raw or formatted input)
+brdocs.format_cpf("52998224725")              # "529.982.247-25"
+brdocs.format_cnpj("11222333000181")          # "11.222.333/0001-81"
+
+# Parse — returns NamedTuple with structured fields
+data = brdocs.parse_cpf("529.982.247-25")
+print(data.root, data.check_digits)            # "52998224" "25"
 ```
 
+### Bulk Operations
+
+```python
+# Same-type batch
+brdocs.validate_list("cpf", ["529.982.247-25", "000.000.000-00"])  # [True, False]
+brdocs.generate_list("cnpj", 3, formatted=True)
+
+# Mixed-type batch
+brdocs.validate_docs([("cpf", "529.982.247-25"), ("cnpj", "11.222.333/0001-81")])  # [True, True]
+```
+
+### CLI
+
+```bash
+brdocs validate cpf 529.982.247-25        # exit 0
+brdocs generate cpf --formatted           # 529.982.247-25
+brdocs format cpf 52998224725              # 529.982.247-25
+brdocs parse cpf 529.982.247-25          # {"root": "52998224", "check_digits": "25", ...}
+brdocs mask cpf 529.982.247-25            # ***.982.247-**
+```
+
+### LGPD / Secure — Mask & Redact
+
+```python
+from brdocs import mask_cpf, mask_cnpj, redact_text, BRDocFilter
+
+mask_cpf("529.982.247-25")    # "***.982.247-**"
+mask_cnpj("11.222.333/0001-81")  # "**.222.333/****-**"
+
+# Redact all CPF/CNPJ in free text
+redact_text("CPF 529.982.247-25 belongs to João")  # "CPF ***.982.247-** belongs to João"
+
+# Logging filter — attach to any Python logger
+import logging
+logging.getLogger().addFilter(BRDocFilter())
+```
+
+### Data Enrichment
+
+```python
+from brdocs import enrich_cnpj, enrich_cep
+
+info = enrich_cnpj("11222333000181")
+# CNPJEnrichmentData(cnpj='...', razao_social='...', cnae='...', municipio='...', uf='...', ...)
+
+cep = enrich_cep("01310-100")
+# CEPEnrichmentData(cep='...', logradouro='...', bairro='...', cidade='...', uf='...')
+```
+
+### Pandas
+
+```python
+import pandas as pd
+import brdocs.integrations.pandas  # registers .brdocs accessor
+
+df = pd.DataFrame({"cpf": ["529.982.247-25", "000.000.000-00"]})
+df["valid"] = df["cpf"].brdocs.is_valid_cpf()   # bool Series
+df["formatted"] = df["cpf"].brdocs.format_cpf()  # str Series
+df["masked"] = df["cpf"].brdocs.mask_cpf()       # str Series
+df["tipo_pix"] = df["pix"].brdocs.classify_pix()  # "CPF" | "CNPJ" | "EMAIL" | "PHONE" | ""
+```
+
+### Polars
+
+```python
+import polars as pl
+import brdocs.integrations.polars  # registers .brdocs on Expr
+
+df = pl.DataFrame({"cpf": ["529.982.247-25", "000.000.000-00"]})
+df.select(pl.col("cpf").brdocs.is_valid_cpf())   # Expr → [True, False]
+df.select(pl.col("cpf").brdocs.format_cpf())    # Expr → ["529.982.247-25", ...]
+df.select(pl.col("cpf").brdocs.mask_cpf())      # Expr → ["***.982.247-**", ...]
+df.select(pl.col("pix").brdocs.classify_pix())  # Expr → ["CPF", "CNPJ", "EMAIL", "PHONE", ""]
+```
+
+### Django
+
+```python
+from brdocs.integrations.django import CPFField, CNPJField, BRDocumentField
+
+class Person(models.Model):
+    cpf = CPFField(unique=True)          # validates + strips formatting on save
+    cnpj = CNPJField(blank=True)
+    documento = BRDocumentField()          # polymorphic — accepts CPF or CNPJ
+```
+
+### Pydantic
+
+```python
+from pydantic import BaseModel
+from brdocs.integrations.pydantic import CPF, CNPJ, IE, CNJ, Renavam, TituloEleitor
+
+class Pessoa(BaseModel):
+    cpf: CPF
+    cnpj: CNPJ | None = None
+
+class Inscricao(BaseModel):
+    ie: IE
+    estado: str
+
+p = Pessoa(cpf="529.982.247-25")  # auto-strips to "52998224725"
+```
+
+
+
 ---
 
-## API Reference
+## License
 
-### Validators
-
-| Function | Document | Notes |
-|----------|----------|-------|
-| `is_valid_cpf(cpf)` | CPF | Accepts raw or formatted (`NNN.NNN.NNN-NN`) |
-| `is_valid_cnpj(cnpj)` | CNPJ | Accepts raw or formatted (`NN.NNN.NNN/NNNN-NN`) |
-| `is_valid_cnj(cnj)` | Processo CNJ | ISO 7064 mod 97 |
-| `is_valid_ie(ie, state)` | IE | All 27 states, per-SEFAZ algorithm |
-| `is_valid_renavam(renavam)` | RENAVAM | Accepts 8–11 digits |
-| `is_valid_titulo_eleitor(titulo)` | Título de Eleitor | SP/MG special rule |
-
-### Generators
-
-| Function | Document | Notes |
-|----------|----------|-------|
-| `generate_cpf(formatted=False)` | CPF | |
-| `generate_cnpj(formatted=False)` | CNPJ | |
-| `generate_cnj()` | Processo CNJ | |
-| `generate_ie(state)` | IE | `state` = 2-letter code, e.g. `"SP"` |
-| `generate_renavam()` | RENAVAM | |
-| `generate_titulo_eleitor()` | Título de Eleitor | |
-
-### Formatters (parsers)
-
-| Function | Document | Canonical format |
-|----------|----------|-----------------|
-| `format_cpf(cpf)` | CPF | `NNN.NNN.NNN-NN` |
-| `format_cnpj(cnpj)` | CNPJ | `NN.NNN.NNN/NNNN-NN` |
-| `format_cnj(cnj)` | Processo CNJ | `NNNNNNN-DD.AAAA.J.TT.OOOO` |
-| `format_ie(ie, state)` | IE | State-specific (see table below) |
-| `format_renavam(renavam)` | RENAVAM | `XXXXXXXXXX-X` |
-| `format_titulo_eleitor(titulo)` | Título de Eleitor | `XXXX XXXX XXXX` |
-
-All formatters accept raw digit strings or already-formatted strings and raise `ValueError` on invalid input.
-
----
-
-## IE — Canonical Formats by State
-
-<details>
-<summary>All 27 states</summary>
-
-| State | Digits | Canonical format |
-|-------|--------|-----------------|
-| AC | 13 | `XXX.XXX.XXX/XXX-XX` |
-| AL | 9 | raw digits |
-| AP | 9 | raw digits |
-| AM | 9 | `XX.XXX.XXX-X` |
-| BA | 8 or 9 | `XXXXXX-XX` / `XXXXXXX-XX` |
-| CE | 9 | `XX.XXX.XXX-X` |
-| DF | 13 | `XXX.XXX.XXX/XXX-XX` |
-| ES | 9 | raw digits |
-| GO | 9 | `XX.XXX.XXX-X` |
-| MA | 9 | raw digits |
-| MT | 11 | raw digits |
-| MS | 9 | raw digits |
-| MG | 13 | `XXX.XXX.XXX/XXXX` |
-| PA | 9 | `XX-XXXXXX-X` |
-| PB | 9 | raw digits |
-| PR | 10 | `XXX.XXXXX-XX` |
-| PE | 9 or 14 | `XXXXXXX-XX` / `XX.X.XXX.XXXXXXX-X` |
-| PI | 9 | raw digits |
-| RJ | 8 | `XX.XXX.XX-X` |
-| RN | 9 or 10 | `XX.XXX.XXX-X` / `XX.XXX.XXX.X-X` |
-| RS | 10 | `XXX/XXXXXXX` |
-| RO | 9 or 14 | raw digits |
-| RR | 9 | raw digits |
-| SC | 9 | `XXX.XXX.XXX` |
-| SP | 12 | `XXX.XXX.XXX.XXX` |
-| SE | 9 | raw digits |
-| TO | 11 | raw digits |
-
-</details>
-
----
-
-## Design Principles
-
-- **Zero dependencies** — stdlib only
-- **100% test coverage** — every branch, every state
-- **Strict typing** — `mypy --strict` passes
-- **Ruff clean** — format + lint
-- **Semantic versioning** — auto-releases via `python-semantic-release`
-
----
-
-## Roadmap
-
-- [ ] `parse_ie()` — structured parser returning a named dict (sequential, state, check digits)
-- [ ] CLI wrapper — `pybrdoc validate cpf 529.982.247-25`
+[MIT](./LICENSE)

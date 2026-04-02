@@ -1,5 +1,5 @@
-from pybrdoc.generators.titulo_eleitor import generate_titulo_eleitor
-from pybrdoc.validators.titulo_eleitor import is_valid_titulo_eleitor
+from brdocs.generators.titulo_eleitor import generate_titulo_eleitor
+from brdocs.validators.titulo_eleitor import is_valid_titulo_eleitor
 
 
 class TestGenerateTituloEleitor:

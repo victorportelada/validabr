@@ -1,5 +1,5 @@
-from pybrdoc.generators.cnpj import generate_cnpj
-from pybrdoc.validators.cnpj import is_valid_cnpj
+from brdocs.generators.cnpj import generate_cnpj
+from brdocs.validators.cnpj import is_valid_cnpj
 
 
 class TestGenerateCnpj:
@@ -58,7 +58,7 @@ class TestGenerateCnpjBranches:
                 return 3
             return _call_count % 7
 
-        with patch("pybrdoc.generators.cnpj.random.randint", side_effect=_side_effect):
+        with patch("brdocs.generators.cnpj.random.randint", side_effect=_side_effect):
             cnpj = generate_cnpj()
 
         assert isinstance(cnpj, str)

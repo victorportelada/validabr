@@ -2,9 +2,9 @@ import re
 
 import pytest
 
-from pybrdoc.generators.ie import generate_ie
-from pybrdoc.parsers.ie import format_ie
-from pybrdoc.validators.ie import is_valid_ie
+from brdocs.generators.ie import generate_ie
+from brdocs.parsers.ie import IEData, format_ie, parse_ie
+from brdocs.validators.ie import is_valid_ie
 
 _ALL_STATES = [
     "AC",
@@ -224,3 +224,60 @@ class TestFormatIeKnownStructure:
         assert "/" in fmt
         assert "-" in fmt
         assert len(fmt) == 17  # XXX.XXX.XXX/XXX-XX
+
+
+class TestParseIE:
+    def test_returns_ie_data(self) -> None:
+        raw = generate_ie("SP")
+        result = parse_ie(raw, "SP")
+        assert isinstance(result, IEData)
+
+    def test_digits_normalized(self) -> None:
+        raw = generate_ie("SP")
+        result = parse_ie(raw, "SP")
+        assert result.digits == raw
+
+    def test_state_normalized_to_uppercase(self) -> None:
+        raw = generate_ie("SP")
+        result = parse_ie(raw, "sp")
+        assert result.state == "SP"
+
+    def test_accepts_formatted_input(self) -> None:
+        raw = generate_ie("SP")
+        formatted = format_ie(raw, "SP")
+        result = parse_ie(formatted, "SP")
+        assert result.digits == raw
+        assert result.state == "SP"
+
+    @pytest.mark.parametrize("state", _ALL_STATES)
+    def test_round_trip_all_states(self, state: str) -> None:
+        raw = generate_ie(state)
+        parsed = parse_ie(raw, state)
+        assert parsed.digits == raw
+        assert parsed.state == state
+
+    def test_is_immutable(self) -> None:
+        raw = generate_ie("SP")
+        result = parse_ie(raw, "SP")
+        with pytest.raises(AttributeError):
+            result.digits = "000000000000"  # type: ignore
+
+    def test_raises_on_non_string_ie(self) -> None:
+        with pytest.raises(ValueError, match="Expected str"):
+            parse_ie(123456789012, "SP")  # type: ignore
+
+    def test_raises_on_non_string_state(self) -> None:
+        with pytest.raises(ValueError, match="Expected str"):
+            parse_ie("123456789012", 42)  # type: ignore
+
+    def test_raises_on_unknown_state(self) -> None:
+        with pytest.raises(ValueError, match="Unknown state code"):
+            parse_ie("123456789012", "XX")
+
+    def test_raises_on_wrong_length(self) -> None:
+        with pytest.raises(ValueError, match="digits"):
+            parse_ie("1" * 11, "SP")  # SP needs 12
+
+    def test_raises_on_dual_length_wrong(self) -> None:
+        with pytest.raises(ValueError, match="or"):
+            parse_ie("1" * 10, "PE")  # PE needs 9 or 14
