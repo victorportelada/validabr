@@ -2,6 +2,7 @@ from .cep import generate_cep
 from .cnh import generate_cnh
 from .cnj import generate_cnj
 from .cnpj import generate_cnpj
+from .cns import generate_cns
 from .cpf import generate_cpf
 from .ie import generate_ie
 from .pis import generate_pis
@@ -13,6 +14,7 @@ __all__ = [
     "generate_cnh",
     "generate_cnj",
     "generate_cnpj",
+    "generate_cns",
     "generate_cpf",
     "generate_ie",
     "generate_pis",

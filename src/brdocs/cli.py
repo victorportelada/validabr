@@ -21,26 +21,33 @@ from .parsers import (
     format_cep,
     format_cnj,
     format_cnpj,
+    format_cns,
     format_cpf,
     format_ie,
+    format_nfe,
     format_pis,
     format_renavam,
     format_titulo_eleitor,
     parse_cep,
     parse_cnj,
     parse_cnpj,
+    parse_cns,
     parse_cpf,
     parse_ie,
+    parse_nfe,
     parse_pis,
     parse_renavam,
     parse_titulo_eleitor,
 )
 from .validators import (
+    classify_pix,
     is_valid_cep,
     is_valid_cnj,
     is_valid_cnpj,
+    is_valid_cns,
     is_valid_cpf,
     is_valid_ie,
+    is_valid_nfe,
     is_valid_pis,
     is_valid_renavam,
     is_valid_titulo_eleitor,
@@ -55,6 +62,8 @@ _VALIDATORS_CLI: dict[str, _ValidatorFn] = {
     "cpf": is_valid_cpf,
     "cnpj": is_valid_cnpj,
     "cnj": is_valid_cnj,
+    "cns": is_valid_cns,
+    "nfe": is_valid_nfe,
     "pis": is_valid_pis,
     "renavam": is_valid_renavam,
     "titulo_eleitor": is_valid_titulo_eleitor,
@@ -65,6 +74,8 @@ _FORMATTERS_CLI: dict[str, _FormatterFn] = {
     "cpf": format_cpf,
     "cnpj": format_cnpj,
     "cnj": format_cnj,
+    "cns": format_cns,
+    "nfe": format_nfe,
     "pis": format_pis,
     "renavam": format_renavam,
     "titulo_eleitor": format_titulo_eleitor,
@@ -75,6 +86,8 @@ _PARSERS_CLI: dict[str, _ParserFn] = {
     "cpf": lambda v: parse_cpf(v)._asdict(),
     "cnpj": lambda v: parse_cnpj(v)._asdict(),
     "cnj": lambda v: parse_cnj(v)._asdict(),
+    "cns": lambda v: parse_cns(v)._asdict(),
+    "nfe": lambda v: parse_nfe(v)._asdict(),
     "pis": lambda v: parse_pis(v)._asdict(),
     "renavam": lambda v: parse_renavam(v)._asdict(),
     "titulo_eleitor": lambda v: parse_titulo_eleitor(v)._asdict(),
@@ -109,6 +122,13 @@ def _mask_pis(v: str) -> str:
     return "*" * len(v)
 
 
+def _mask_cns(v: str) -> str:
+    digits = re.sub(r"\D", "", v)
+    if len(digits) == 15:
+        return f"{digits[:3]} {digits[3:7]} {digits[7:11]} {digits[11:]}"
+    return "*" * len(v)
+
+
 def _mask_generic(v: str) -> str:
     return "*" * len(v)
 
@@ -120,13 +140,28 @@ _MASKS: dict[str, _MaskFn] = {
     "cpf": _mask_cpf,
     "cnpj": _mask_cnpj,
     "cnj": _mask_generic,
+    "cns": _mask_cns,
     "pis": _mask_pis,
     "renavam": _mask_generic,
     "titulo_eleitor": _mask_generic,
 }
 
 
-_CLI_TYPES = frozenset(["cep", "cpf", "cnpj", "cnj", "pis", "renavam", "titulo_eleitor", "ie"])
+_CLI_TYPES = frozenset(
+    [
+        "cep",
+        "cpf",
+        "cnpj",
+        "cnj",
+        "cns",
+        "nfe",
+        "pis",
+        "pix",
+        "renavam",
+        "titulo_eleitor",
+        "ie",
+    ]
+)
 
 
 def _resolve_cli_type(doc_type: str) -> str:
@@ -148,6 +183,14 @@ def _cmd_validate(args: argparse.Namespace) -> None:
         _err(str(e))
 
     state: str = args.state or ""
+
+    if doc_type == "pix":
+        key_type = classify_pix(args.value)
+        if key_type is None:
+            print(f"Invalid PIX: {args.value}")
+            sys.exit(1)
+        print(f"PIX key type: {key_type.name} ({key_type.value})")
+        return
 
     if doc_type == "ie":
         if not state:
@@ -240,9 +283,10 @@ def _build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="command", required=True)
 
     # validate
-    p_validate = sub.add_parser("validate", help="Validate a document.")
+    p_validate = sub.add_parser("validate", help="Validate a document (or classify a PIX key).")
     p_validate.add_argument(
-        "type", help="Document type: cep, cpf, cnpj, cnj, pis, renavam, titulo_eleitor, ie."
+        "type",
+        help="Document type: cep, cpf, cnpj, cnj, cns, nfe, pis, pix, renavam, titulo_eleitor, ie.",
     )
     p_validate.add_argument("value", help="Document value to validate.")
     p_validate.add_argument("--state", help="State code (required for ie).")
