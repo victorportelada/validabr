@@ -57,5 +57,4 @@ jobs:
           gh release create ${{ steps.version.outputs.tag }} \
             --title "${{ steps.version.outputs.tag }}" \
             --generate-notes \
-            --target master \
-            --force
+            --target master || true
