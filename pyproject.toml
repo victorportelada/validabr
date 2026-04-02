@@ -10,12 +10,19 @@ authors = [
 requires-python = ">=3.10"
 dependencies = []
 
+[project.optional-dependencies]
+django = ["django>=5.0"]
+
+[project.scripts]
+brdocs = "brdocs.cli:main"
+
 [build-system]
 requires = ["uv_build>=0.9.27,<0.10.0"]
 build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "django-stubs>=6.0.2",
     "mypy>=1.19.1",
     "pre-commit>=4.5.1",
     "pytest>=9.0.2",
@@ -33,6 +40,8 @@ target-version = "py310"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "N", "UP", "B", "A", "C4", "SIM", "RUF"]
+ignore = ["E402"]  # Django tests require setup before imports
+per-file-ignores = { "tests/**/*.py" = ["N806", "E402", "RUF100"] }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -40,6 +49,9 @@ addopts = "--cov=src --cov-report=term-missing"
 
 [tool.mypy]
 strict = true
+[[tool.mypy.overrides]]
+module = "tests.*"
+ignore_errors = true
 
 [tool.semantic_release]
 version_toml = ["pyproject.toml:project.version"]

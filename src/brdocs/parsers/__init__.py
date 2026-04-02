@@ -1,15 +1,39 @@
-from .cnj import format_cnj
-from .cnpj import format_cnpj
-from .cpf import format_cpf
-from .ie import format_ie
-from .renavam import format_renavam
-from .titulo_eleitor import format_titulo_eleitor
+from .cep import CEPData, format_cep, parse_cep
+from .cnh import CNHData, format_cnh, parse_cnh
+from .cnj import CNJData, format_cnj, parse_cnj
+from .cnpj import CNPJData, format_cnpj, parse_cnpj
+from .cpf import CPFData, format_cpf, parse_cpf
+from .ie import IEData, format_ie, parse_ie
+from .pis import PISData, format_pis, parse_pis
+from .renavam import RenavamData, format_renavam, parse_renavam
+from .titulo_eleitor import TituloData, format_titulo_eleitor, parse_titulo_eleitor
 
 __all__ = [
+    "CEPData",
+    "CNHData",
+    "CNJData",
+    "CNPJData",
+    "CPFData",
+    "IEData",
+    "PISData",
+    "RenavamData",
+    "TituloData",
+    "format_cep",
+    "format_cnh",
     "format_cnj",
     "format_cnpj",
     "format_cpf",
     "format_ie",
+    "format_pis",
     "format_renavam",
     "format_titulo_eleitor",
+    "parse_cep",
+    "parse_cnh",
+    "parse_cnj",
+    "parse_cnpj",
+    "parse_cpf",
+    "parse_ie",
+    "parse_pis",
+    "parse_renavam",
+    "parse_titulo_eleitor",
 ]

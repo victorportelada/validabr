@@ -1,5 +1,12 @@
 import re
 from collections.abc import Callable
+from typing import NamedTuple
+
+
+class IEData(NamedTuple):
+    digits: str  # all raw digits, no formatting
+    state: str  # normalized uppercase state code
+
 
 _VALID_STATES = frozenset(
     [
@@ -165,6 +172,45 @@ _FORMATTERS: dict[str, dict[int, Callable[[str], str]]] = {
     "SE": {9: _raw},
     "TO": {11: _raw},
 }
+
+
+def parse_ie(ie: str, state: str) -> IEData:
+    """
+    Decomposes an IE string into its normalized parts.
+
+    Validates digit count against SEFAZ length rules for the given state.
+    Accepts raw digit strings or already-formatted strings (punctuation stripped).
+
+    Returns:
+        IEData with digits (raw, no formatting) and state (normalized uppercase).
+
+    Raises:
+        ValueError: if ie or state is not a str, if the state code is unknown,
+                    or if the digit count does not match the expected length(s).
+    """
+    if not isinstance(ie, str):
+        raise ValueError(f"Expected str, got {type(ie).__name__}")
+    if not isinstance(state, str):
+        raise ValueError(f"Expected str, got {type(state).__name__}")
+
+    state = state.upper().strip()
+
+    if state not in _VALID_STATES:
+        raise ValueError(f"Unknown state code: '{state}'")
+
+    digits = re.sub(r"\D", "", ie)
+    n = len(digits)
+
+    formatters = _FORMATTERS[state]
+
+    if n not in formatters:
+        accepted = sorted(formatters)
+        if len(accepted) == 1:
+            raise ValueError(f"IE for {state} must have {accepted[0]} digits, got {n}")
+        lengths = " or ".join(str(x) for x in accepted)
+        raise ValueError(f"IE for {state} must have {lengths} digits, got {n}")
+
+    return IEData(digits=digits, state=state)
 
 
 def format_ie(ie: str, state: str) -> str:

@@ -170,6 +170,7 @@ Position `brdocs` as the defacto library for Brazilian Data Engineering workload
 
 If you are an AI reading this file to continue work:
 1. Ensure your implementation remains inside `src/brdocs/`.
+
 2. Do not introduce requirements directly into `pyproject.toml` base dependencies. Use `[project.optional-dependencies]` if strictly needed.
 3. Every new algorithm requires a symmetric implementation of: _Generator_, _Validator_, _Formatter_, and _Parser_.
 4. Achieve exactly 100% code coverage. Run tests using `uv run pytest`. Verify linting using `uv run ruff check src/ tests/` and `uv run mypy src/ tests/`. 
