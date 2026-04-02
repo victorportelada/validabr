@@ -11,7 +11,6 @@ Usage:
 
 import argparse
 import json
-import re
 import sys
 from collections.abc import Callable
 from typing import NoReturn
@@ -39,6 +38,7 @@ from .parsers import (
     parse_renavam,
     parse_titulo_eleitor,
 )
+from .secure import mask_cep, mask_cnpj, mask_cns, mask_cpf, mask_pis
 from .validators import (
     classify_pix,
     is_valid_cep,
@@ -94,41 +94,6 @@ _PARSERS_CLI: dict[str, _ParserFn] = {
 }
 
 
-def _mask_cpf(v: str) -> str:
-    digits = re.sub(r"\D", "", v)
-    if len(digits) == 11:
-        return f"***.{digits[3:6]}.{digits[6:9]}-**"
-    return "*" * len(v)
-
-
-def _mask_cnpj(v: str) -> str:
-    digits = re.sub(r"\D", "", v)
-    if len(digits) == 14:
-        return f"**.{digits[2:5]}.{digits[5:8]}/****-**"
-    return "*" * len(v)
-
-
-def _mask_cep(v: str) -> str:
-    digits = re.sub(r"\D", "", v)
-    if len(digits) == 8:
-        return f"{digits[:5]}-***"
-    return "*" * len(v)
-
-
-def _mask_pis(v: str) -> str:
-    digits = re.sub(r"\D", "", v)
-    if len(digits) == 11:
-        return f"{digits[:3]}.{digits[3:8]}.**-{digits[10]}"
-    return "*" * len(v)
-
-
-def _mask_cns(v: str) -> str:
-    digits = re.sub(r"\D", "", v)
-    if len(digits) == 15:
-        return f"{digits[:3]} {digits[3:7]} {digits[7:11]} {digits[11:]}"
-    return "*" * len(v)
-
-
 def _mask_generic(v: str) -> str:
     return "*" * len(v)
 
@@ -136,12 +101,12 @@ def _mask_generic(v: str) -> str:
 _MaskFn = Callable[[str], str]
 
 _MASKS: dict[str, _MaskFn] = {
-    "cep": _mask_cep,
-    "cpf": _mask_cpf,
-    "cnpj": _mask_cnpj,
+    "cep": mask_cep,
+    "cpf": mask_cpf,
+    "cnpj": mask_cnpj,
     "cnj": _mask_generic,
-    "cns": _mask_cns,
-    "pis": _mask_pis,
+    "cns": mask_cns,
+    "pis": mask_pis,
     "renavam": _mask_generic,
     "titulo_eleitor": _mask_generic,
 }

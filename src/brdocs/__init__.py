@@ -2,6 +2,7 @@ from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _pkg_version
 
 from .bulk import generate_list, validate_docs, validate_list
+from .enrich import CEPEnrichment, CNPJEnrichment, enrich_cep, enrich_cnpj
 
 try:
     __version__: str = _pkg_version("brdocs")
@@ -75,9 +76,11 @@ from .validators import (
 __all__ = [
     "BRDocFilter",
     "CEPData",
+    "CEPEnrichment",
     "CNHData",
     "CNJData",
     "CNPJData",
+    "CNPJEnrichment",
     "CNSData",
     "CPFData",
     "IEData",
@@ -88,6 +91,8 @@ __all__ = [
     "TituloData",
     "__version__",
     "classify_pix",
+    "enrich_cep",
+    "enrich_cnpj",
     "format_cep",
     "format_cnh",
     "format_cnj",

@@ -1,7 +1,8 @@
 """
-LGPD-oriented PII redaction utilities.
+LGPD-oriented PII masking and redaction utilities.
 
 Provides:
+- mask_cpf / mask_cnpj / mask_pis / mask_cep / mask_cns — named masking functions
 - redact_text()  — scan arbitrary text, replace valid Brazilian docs with asterisks
 - BRDocFilter    — Python logging.Filter that auto-redacts log records
 """
@@ -12,6 +13,71 @@ from collections.abc import Sequence
 
 from .validators.cnpj import is_valid_cnpj
 from .validators.cpf import is_valid_cpf
+
+# ---------------------------------------------------------------------------
+# Named mask functions (LGPD-compliant partial masking)
+# ---------------------------------------------------------------------------
+
+
+def mask_cpf(cpf: str) -> str:
+    """Mask a CPF: ``529.982.247-25`` → ``***.982.247-**``.
+
+    Accepts formatted or raw digits. Falls back to full asterisks for
+    non-standard lengths.
+    """
+    digits = re.sub(r"\D", "", cpf)
+    if len(digits) == 11:
+        return f"***.{digits[3:6]}.{digits[6:9]}-**"
+    return "*" * len(cpf)
+
+
+def mask_cnpj(cnpj: str) -> str:
+    """Mask a CNPJ: ``11.222.333/0001-81`` → ``**.222.333/****-**``.
+
+    Accepts formatted or raw digits. Falls back to full asterisks for
+    non-standard lengths.
+    """
+    digits = re.sub(r"\D", "", cnpj)
+    if len(digits) == 14:
+        return f"**.{digits[2:5]}.{digits[5:8]}/****-**"
+    return "*" * len(cnpj)
+
+
+def mask_pis(pis: str) -> str:
+    """Mask a PIS: ``123.45678.90-1`` → ``123.45678.**-*``.
+
+    Accepts formatted or raw digits. Falls back to full asterisks for
+    non-standard lengths.
+    """
+    digits = re.sub(r"\D", "", pis)
+    if len(digits) == 11:
+        return f"{digits[:3]}.{digits[3:8]}.**-{digits[10]}"
+    return "*" * len(pis)
+
+
+def mask_cep(cep: str) -> str:
+    """Mask a CEP: ``01310-100`` → ``01310-***``.
+
+    Accepts formatted or raw digits. Falls back to full asterisks for
+    non-standard lengths.
+    """
+    digits = re.sub(r"\D", "", cep)
+    if len(digits) == 8:
+        return f"{digits[:5]}-***"
+    return "*" * len(cep)
+
+
+def mask_cns(cns: str) -> str:
+    """Mask a CNS: ``167 4416 4003 0005`` → ``167 **** **** ****``.
+
+    Accepts formatted or raw digits. Falls back to full asterisks for
+    non-standard lengths.
+    """
+    digits = re.sub(r"\D", "", cns)
+    if len(digits) == 15:
+        return f"{digits[:3]} **** **** ****"
+    return "*" * len(cns)
+
 
 # ---------------------------------------------------------------------------
 # Regex patterns — broad enough to capture candidates; validation narrows them
