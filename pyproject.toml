@@ -1,7 +1,7 @@
 
 [project]
 name = "brdocs"
-version = "0.1.0"
+version = "1.0.0"
 description = "Enterprise toolkit for validating, parsing, enriching, and anonymizing Brazilian documents (LGPD-ready)"
 readme = "README.md"
 authors = [
