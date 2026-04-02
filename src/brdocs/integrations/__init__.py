@@ -59,3 +59,17 @@ try:
     ]
 except ImportError:
     pass
+
+try:
+    from brdocs.integrations.pandas import BRDocsAccessor
+
+    __all__ += ["BRDocsAccessor"]
+except ImportError:
+    pass
+
+try:
+    from brdocs.integrations.polars import BRDocsExpr
+
+    __all__ += ["BRDocsExpr"]
+except ImportError:
+    pass

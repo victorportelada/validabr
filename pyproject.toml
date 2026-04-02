@@ -12,6 +12,8 @@ dependencies = []
 
 [project.optional-dependencies]
 django = ["django>=5.0"]
+pandas = ["pandas>=2.0"]
+polars = ["polars>=1.0"]
 
 [project.scripts]
 brdocs = "brdocs.cli:main"
@@ -24,6 +26,7 @@ build-backend = "uv_build"
 dev = [
     "django-stubs>=6.0.2",
     "mypy>=1.19.1",
+    "pandas-stubs>=2.3.3.260113",
     "pre-commit>=4.5.1",
     "pytest>=9.0.2",
     "pytest-cov>=7.1.0",
@@ -32,6 +35,9 @@ dev = [
     "ruff>=0.15.8",
     "streamlit>=1.55.0",
     "watchdog>=6.0.0",
+]
+polars = [
+    "polars>=1.39.3",
 ]
 
 [tool.ruff]
