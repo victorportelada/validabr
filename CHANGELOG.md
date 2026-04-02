@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## [1.1.0] - 2026-04-02
+## [0.2.0] - 2026-04-02
 
 ### Added
 - CNPJ alfanumérico support (IN RFB 2.229/2024): `is_valid_cnpj`, `generate_cnpj(alfa=True)`, `format_cnpj`, and `parse_cnpj` now handle the new alphanumeric format
