@@ -8,6 +8,25 @@ authors = [
     { name = "victor", email = "vitiportelada@gmail.com" }
 ]
 requires-python = ">=3.10"
+keywords = [
+    "brazil", "brasil", "cpf", "cnpj", "cnh", "cep", "pis", "pasep",
+    "nfe", "pix", "titulo-eleitoral", "renavam", "cns", "sus",
+    "validation", "validacao", "brazilian-documents", "lgpd", "document-parser"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Portuguese (Brazilian)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Office/Business",
+    "Typing :: Typed",
+]
 dependencies = []
 
 [project.optional-dependencies]
