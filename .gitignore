@@ -32,4 +32,7 @@ Thumbs.db
 *.swp
 *~
 
-# validabr
+# AI tool configs (local only)
+opencode.json
+.clinerules
+.claude/
